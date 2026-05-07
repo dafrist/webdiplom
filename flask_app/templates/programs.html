@@ -1,3 +1,23 @@
 {% extends 'base.html' %}
 {% block title %}Программы — Умники и Умницы{% endblock %}
-{% block content %}<section class="section section-alt"><div class="container"><div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · Программы</div><h1 class="page-title">Программы центра</h1><p class="section-lead">Каждая программа адаптирована под возраст и потребности детей.</p><div class="cards-row">{% for p in programs %}<article class="program-card"><h3>{{ p.slug|emoji }} {{ p.title }}</h3><p class="section-lead">Возраст: {% if p.age_from or p.age_to %}{{ p.age_from or '' }}–{{ p.age_to or '' }} лет{% else %}по согласованию{% endif %}</p><p>{{ p.short_description }}</p><a href="{{ url_for('contacts') }}" class="btn btn-sm btn-full" data-application-trigger>Связаться</a></article>{% else %}<p>Пока нет добавленных программ.</p>{% endfor %}</div></div></section>{% endblock %}
+{% block content %}
+<section class="section section-alt">
+    <div class="container">
+        <div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · Программы</div>
+        <h1 class="page-title">Программы центра</h1>
+        <p class="section-lead">Каждая программа адаптирована под возраст и потребности детей.</p>
+        <div class="cards-row">
+            {% for p in programs %}
+                <article class="program-card">
+                    <h3><span class="ui-icon program-title-icon {{ p.slug|program_icon }}" aria-hidden="true"></span>{{ p.title }}</h3>
+                    <p class="section-lead">Возраст: {% if p.age_from or p.age_to %}{{ p.age_from or '' }}–{{ p.age_to or '' }} лет{% else %}по согласованию{% endif %}</p>
+                    <p>{{ p.short_description }}</p>
+                    <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-full" data-application-trigger>Связаться</a>
+                </article>
+            {% else %}
+                <p>Пока нет добавленных программ.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

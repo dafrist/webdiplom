@@ -142,17 +142,22 @@ def admin_required(view):
     return wrapped_view
 
 
-def program_emoji(slug: str) -> str:
+def program_icon(slug: str) -> str:
     return {
-        "razvivaika-4plus": "🧩", "doshkolyata-5plus": "🎒", "reading": "📖",
-        "calligraphy": "✍️", "speech-therapist": "🗣️", "english": "🇬🇧",
-        "drawing": "🎨", "school-prep": "📚",
-    }.get(slug, "✨")
+        "razvivaika-4plus": "ui-icon-chart",
+        "doshkolyata-5plus": "ui-icon-users",
+        "reading": "ui-icon-book",
+        "calligraphy": "ui-icon-pen",
+        "speech-therapist": "ui-icon-message",
+        "english": "ui-icon-book",
+        "drawing": "ui-icon-palette",
+        "school-prep": "ui-icon-star",
+    }.get(slug, "ui-icon-book")
 
 
-@app.template_filter("emoji")
-def emoji_filter(slug: str) -> str:
-    return program_emoji(slug)
+@app.template_filter("program_icon")
+def program_icon_filter(slug: str) -> str:
+    return program_icon(slug)
 
 
 @app.route("/")
