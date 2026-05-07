@@ -1,3 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}О центре — Умники и Умницы{% endblock %}
-{% block content %}<section class="section section-alt"><div class="container"><div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · О центре</div><h1 class="page-title">О центре</h1><p class="section-lead">«Умники и Умницы» — уютный детский центр развития личности в Уфе.</p><div class="cards-row"><article class="card"><h3>💛 Забота</h3><p>Мы бережно помогаем ребёнку раскрывать способности и чувствовать себя уверенно.</p></article><article class="card"><h3>👩‍🏫 Педагоги</h3><p>Занятия ведут специалисты, которые умеют заинтересовать и поддержать.</p></article><article class="card"><h3>🧩 Развитие</h3><p>Программы объединяют речь, мышление, творчество, общение и подготовку к школе.</p></article></div></div></section>{% endblock %}
+{% block content %}
+<section class="section section-alt">
+    <div class="container">
+        <div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · О центре</div>
+        <h1 class="page-title">О центре</h1>
+        <p class="section-lead">«Умники и Умницы» — уютный детский центр развития личности в Уфе.</p>
+        <div class="cards-row">
+            <article class="card feature-card"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><h3>Забота</h3><p>Мы бережно помогаем ребёнку раскрывать способности и чувствовать себя уверенно.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><h3>Педагоги</h3><p>Занятия ведут специалисты, которые умеют заинтересовать и поддержать.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><h3>Развитие</h3><p>Программы объединяют речь, мышление, творчество, общение и подготовку к школе.</p></article>
+        </div>
+    </div>
+</section>
+{% endblock %}

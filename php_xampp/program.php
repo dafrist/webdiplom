@@ -7,25 +7,23 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/config.php';
 
 
-function program_emoji(string $slug): string {
+function program_icon(string $slug): string {
     $map = [
-        'razvivaika-4plus' => '🧩',
-        'doshkolyata-5plus' => '🎒',
-        'reading' => '📖',
-        'calligraphy' => '✍️',
-        'speech-therapist' => '🗣️',
-        'english' => '🇬🇧',
-        'vocal' => '🎤',
-        'acting' => '🎭',
-        'drawing' => '🎨',
-        'dance' => '💃',
-        'ofp-wrestling' => '🤼',
-        'school-prep' => '📚',
+        'razvivaika-4plus' => 'ui-icon-chart',
+        'doshkolyata-5plus' => 'ui-icon-users',
+        'reading' => 'ui-icon-book',
+        'calligraphy' => 'ui-icon-pen',
+        'speech-therapist' => 'ui-icon-message',
+        'english' => 'ui-icon-book',
+        'vocal' => 'ui-icon-music',
+        'acting' => 'ui-icon-star',
+        'drawing' => 'ui-icon-palette',
+        'dance' => 'ui-icon-activity',
+        'ofp-wrestling' => 'ui-icon-activity',
+        'school-prep' => 'ui-icon-star',
     ];
-    return $map[$slug] ?? '✨';
+    return $map[$slug] ?? 'ui-icon-book';
 }
-
-
 $slug = (string)($_GET['slug'] ?? '');
 $program = null;
 
@@ -53,7 +51,10 @@ if ($slug !== '') {
 <header class="site-header">
     <div class="container header-inner">
         <div class="logo">
-            <div class="logo-circle">у</div>
+            <span class="logo-mark">
+                <img src="/static/images/logo.png" alt="Умники и Умницы" onerror="this.hidden=true; this.parentElement.classList.add('is-fallback')">
+                <span class="logo-fallback">У</span>
+            </span>
             <div class="logo-text">
                 <div class="logo-title">Умники и Умницы</div>
                 <div class="logo-subtitle">центр развития личности</div>
@@ -69,7 +70,7 @@ if ($slug !== '') {
             <a href="news.php">Новости</a>
             <a href="login.php">Личный кабинет</a>
         </nav>
-        <a href="parents.php" class="btn btn-sm btn-outline">Онлайн-заявка</a>
+        <a href="parents.php" class="btn btn-sm btn-application">Онлайн-заявка</a>
     </div>
 </header>
 
@@ -85,7 +86,7 @@ if ($slug !== '') {
                 <h1 class="page-title">Программа не найдена</h1>
                 <p class="section-lead">Возможно, ссылка устарела или программа была изменена.</p>
             <?php else: ?>
-                <h1 class="page-title"><?php echo program_emoji($program['slug']) . ' ' . htmlspecialchars($program['title'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></h1>
+                <h1 class="page-title"><span class="ui-icon program-title-icon <?php echo htmlspecialchars(program_icon($program['slug']), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>" aria-hidden="true"></span><?php echo htmlspecialchars($program['title'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></h1>
                 <p class="section-lead">
                     Возраст:
                     <?php if ($program['age_from'] || $program['age_to']): ?>
@@ -107,5 +108,52 @@ if ($slug !== '') {
         </div>
     </section>
 </main>
+
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <div class="footer-brand">
+            <div class="logo footer-logo">
+                <span class="logo-mark">
+                    <img src="/static/images/logo.png" alt="Умники и Умницы" onerror="this.hidden=true; this.parentElement.classList.add('is-fallback')">
+                    <span class="logo-fallback">У</span>
+                </span>
+                <div class="logo-text">
+                    <div class="logo-title">Умники и Умницы</div>
+                    <div class="logo-subtitle">центр развития личности</div>
+                </div>
+            </div>
+            <p class="footer-text">Детский центр в Уфе с развивающими занятиями, подготовкой к школе, логопедом и психологом для детей 3–10 лет.</p>
+        </div>
+        <div>
+            <h3 class="footer-title">Разделы</h3>
+            <ul class="footer-list">
+                <li><a href="about.html">О центре</a></li>
+                <li><a href="programs.php">Программы</a></li>
+                <li><a href="gallery.html">Фотогалерея</a></li>
+                <li><a href="news.php">Новости</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="footer-title">Контакты</h3>
+            <ul class="footer-list">
+                <li><a href="tel:+73470000000">+7 (347) 000-00-00</a></li>
+                <li><a href="mailto:info@umniki-ufa.ru">info@umniki-ufa.ru</a></li>
+                <li>г. Уфа, ул. Примерная, 10</li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="footer-title">График работы</h3>
+            <ul class="footer-list">
+                <li>Пн–Пт: 09:00–20:00</li>
+                <li>Сб: 10:00–18:00</li>
+                <li>Вс: по записи</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 Умники и Умницы</span>
+        <span>Развивающие занятия, логопед, психолог, подготовка к школе</span>
+    </div>
+</footer>
 </body>
 </html>

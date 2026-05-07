@@ -65,7 +65,10 @@ try {
 <header class="site-header">
     <div class="container header-inner">
         <div class="logo">
-            <div class="logo-circle">у</div>
+            <span class="logo-mark">
+                <img src="/static/images/logo.png" alt="Умники и Умницы" onerror="this.hidden=true; this.parentElement.classList.add('is-fallback')">
+                <span class="logo-fallback">У</span>
+            </span>
             <div class="logo-text">
                 <div class="logo-title">Умники и Умницы</div>
                 <div class="logo-subtitle">центр развития личности</div>
@@ -81,7 +84,7 @@ try {
             <a href="news.php">Новости</a>
             <a href="login.php" class="is-current">Личный кабинет</a>
         </nav>
-        <a href="parents.php" class="btn btn-sm btn-outline">Онлайн-заявка</a>
+        <a href="parents.php" class="btn btn-sm btn-application">Онлайн-заявка</a>
     </div>
 </header>
 
@@ -252,5 +255,52 @@ try {
         </div>
     </section>
 </main>
+
+<footer class="site-footer">
+    <div class="container footer-grid">
+        <div class="footer-brand">
+            <div class="logo footer-logo">
+                <span class="logo-mark">
+                    <img src="/static/images/logo.png" alt="Умники и Умницы" onerror="this.hidden=true; this.parentElement.classList.add('is-fallback')">
+                    <span class="logo-fallback">У</span>
+                </span>
+                <div class="logo-text">
+                    <div class="logo-title">Умники и Умницы</div>
+                    <div class="logo-subtitle">центр развития личности</div>
+                </div>
+            </div>
+            <p class="footer-text">Детский центр в Уфе с развивающими занятиями, подготовкой к школе, логопедом и психологом для детей 3–10 лет.</p>
+        </div>
+        <div>
+            <h3 class="footer-title">Разделы</h3>
+            <ul class="footer-list">
+                <li><a href="about.html">О центре</a></li>
+                <li><a href="programs.php">Программы</a></li>
+                <li><a href="gallery.html">Фотогалерея</a></li>
+                <li><a href="news.php">Новости</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="footer-title">Контакты</h3>
+            <ul class="footer-list">
+                <li><a href="tel:+73470000000">+7 (347) 000-00-00</a></li>
+                <li><a href="mailto:info@umniki-ufa.ru">info@umniki-ufa.ru</a></li>
+                <li>г. Уфа, ул. Примерная, 10</li>
+            </ul>
+        </div>
+        <div>
+            <h3 class="footer-title">График работы</h3>
+            <ul class="footer-list">
+                <li>Пн–Пт: 09:00–20:00</li>
+                <li>Сб: 10:00–18:00</li>
+                <li>Вс: по записи</li>
+            </ul>
+        </div>
+    </div>
+    <div class="container footer-bottom">
+        <span>© 2026 Умники и Умницы</span>
+        <span>Развивающие занятия, логопед, психолог, подготовка к школе</span>
+    </div>
+</footer>
 </body>
 </html>
