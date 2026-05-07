@@ -1,0 +1,81 @@
+<?php
+declare(strict_types=1);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/config.php';
+
+try {
+    $stmt = $pdo->query('SELECT * FROM news WHERE is_published = 1 ORDER BY created_at DESC');
+    $newsList = $stmt->fetchAll();
+} catch (PDOException $e) {
+    $newsList = [];
+}
+?>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Новости — «Умники и Умницы»</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <script defer src="js/main.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="container header-inner">
+        <div class="logo">
+            <div class="logo-circle">у</div>
+            <div class="logo-text">
+                <div class="logo-title">Умники и Умницы</div>
+                <div class="logo-subtitle">центр развития личности</div>
+            </div>
+        </div>
+        <nav class="main-nav">
+            <a href="index.html">Главная</a>
+            <a href="about.html">О центре</a>
+            <a href="programs.php">Программы</a>
+            <a href="gallery.html">Фотогалерея</a>
+            <a href="parents.php">Родителям</a>
+            <a href="contacts.html">Контакты</a>
+            <a href="news.php" class="is-current">Новости</a>
+            <a href="login.php">Личный кабинет</a>
+        </nav>
+        <a href="parents.php" class="btn btn-sm btn-outline">Онлайн-заявка</a>
+    </div>
+</header>
+
+<main>
+    <section class="section section-alt">
+        <div class="container">
+            <div class="breadcrumbs"><a href="index.html">Главная</a> · Новости</div>
+            <h1 class="page-title">Новости центра</h1>
+            <p class="section-lead">Анонсы занятий, важные объявления и события «Умников и Умниц».</p>
+
+            <?php if (!$newsList): ?>
+                <p>Пока нет опубликованных новостей.</p>
+            <?php else: ?>
+                <div class="cards-row">
+                    <?php foreach ($newsList as $n): ?>
+                        <article class="news-card">
+                            <h3><?php echo htmlspecialchars($n['title'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?></h3>
+                            <p class="news-meta">
+                                <?php echo htmlspecialchars(date('d.m.Y', strtotime($n['created_at'])), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>
+                            </p>
+                            <?php if (!empty($n['teaser'])): ?>
+                                <p><?php echo nl2br(htmlspecialchars($n['teaser'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')); ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($n['body'])): ?>
+                                <p><?php echo nl2br(htmlspecialchars($n['body'], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')); ?></p>
+                            <?php endif; ?>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
+</main>
+</body>
+</html>
