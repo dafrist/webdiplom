@@ -1,3 +1,31 @@
 {% extends 'base.html' %}
 {% block title %}Фотогалерея — Умники и Умницы{% endblock %}
-{% block content %}<section class="section section-alt"><div class="container"><div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · Фотогалерея</div><h1 class="page-title">Фотогалерея</h1><p class="section-lead">Игры, творчество и тёплая атмосфера нашего центра.</p><div class="photo-strip"><img class="photo-card" src="{{ url_for('static', filename='images/photo_1.png') }}" alt="Мини-группы"><img class="photo-card" src="{{ url_for('static', filename='images/photo_2.png') }}" alt="Творчество"><img class="photo-card" src="{{ url_for('static', filename='images/photo_3.png') }}" alt="Подготовка к школе"></div></div></section>{% endblock %}
+{% block content %}
+<section class="section section-alt page-section">
+    <div class="container">
+        <div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · Фотогалерея</div>
+        <header class="section-heading">
+            <h1 class="page-title">Фотогалерея</h1>
+            <p class="section-lead">Игры, творчество и рабочая атмосфера занятий в центре.</p>
+        </header>
+        <div class="gallery-grid">
+            <figure class="gallery-card">
+                <div class="gallery-image"><img src="{{ url_for('static', filename='images/photo_1.png') }}" alt="Занятия в мини-группах" onerror="this.remove(); this.parentElement.classList.add('is-placeholder')"></div>
+                <figcaption><strong>Занятия в мини-группах</strong><span>Развивающие задания и совместная работа детей.</span></figcaption>
+            </figure>
+            <figure class="gallery-card">
+                <div class="gallery-image"><img src="{{ url_for('static', filename='images/photo_2.png') }}" alt="Творческие занятия" onerror="this.remove(); this.parentElement.classList.add('is-placeholder')"></div>
+                <figcaption><strong>Творческие занятия</strong><span>Рисование, поделки и упражнения на мелкую моторику.</span></figcaption>
+            </figure>
+            <figure class="gallery-card">
+                <div class="gallery-image"><img src="{{ url_for('static', filename='images/photo_3.png') }}" alt="Подготовка к школе" onerror="this.remove(); this.parentElement.classList.add('is-placeholder')"></div>
+                <figcaption><strong>Подготовка к школе</strong><span>Чтение, счёт, логика и уверенность перед первым классом.</span></figcaption>
+            </figure>
+            <figure class="gallery-card">
+                <div class="gallery-image is-placeholder"></div>
+                <figcaption><strong>Мероприятия центра</strong><span>Здесь можно разместить фотографии праздников и открытых занятий.</span></figcaption>
+            </figure>
+        </div>
+    </div>
+</section>
+{% endblock %}
