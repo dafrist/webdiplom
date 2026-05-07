@@ -18,19 +18,11 @@
                 <a class="shortcut" href="{{ url_for('programs') }}"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><span>Психолог</span></a>
             </div>
         </div>
-        <div class="hero-visual hero-visual-lite">
-            <div class="hero-card hero-card-lite hero-feature-card">
-                <div>
-                    <span class="hero-card-label">Главное о центре</span>
-                    <h2>Поддерживаем развитие ребенка без перегруза</h2>
-                    <p>Подбираем формат занятий под возраст, задачу семьи и комфортный темп ребенка.</p>
-                </div>
-                <div class="hero-feature-grid">
-                    <div class="hero-feature"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><strong>Мини-группы до 8 детей</strong></div>
-                    <div class="hero-feature"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><strong>Подбор программы</strong></div>
-                    <div class="hero-feature"><span class="ui-icon ui-icon-clock" aria-hidden="true"></span><strong>Удобное расписание</strong></div>
-                    <div class="hero-feature"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><strong>Подготовка к школе</strong></div>
-                </div>
+        <div class="hero-visual hero-visual-lite" aria-label="Ключевые параметры центра">
+            <div class="hero-summary-card">
+                <div class="hero-summary-item"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><strong>до 8 детей</strong><span>в мини-группе</span></div>
+                <div class="hero-summary-item"><span class="ui-icon ui-icon-clock" aria-hidden="true"></span><strong>09:00–20:00</strong><span>занятия в будни</span></div>
+                <div class="hero-summary-item"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><strong>3–10 лет</strong><span>программы по возрасту</span></div>
             </div>
         </div>
     </div>
@@ -80,10 +72,10 @@
     <div class="container">
         <h2 class="page-title">Результаты занятий</h2>
         <div class="cards-row results-grid">
-            <article class="card result-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><p>ребенок увереннее общается;</p></article>
-            <article class="card result-card"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><p>улучшается внимание и память;</p></article>
-            <article class="card result-card"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><p>появляется интерес к учебе;</p></article>
-            <article class="card result-card"><span class="ui-icon ui-icon-shield" aria-hidden="true"></span><p>формируется готовность к школе.</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><p>Ребенок увереннее общается со сверстниками.</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><p>Улучшаются внимание, память и усидчивость.</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><p>Появляется интерес к учебе и новым заданиям.</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-shield" aria-hidden="true"></span><p>Формируется спокойная готовность к школе.</p></article>
         </div>
     </div>
 </section>
@@ -99,7 +91,40 @@
         </div>
     </div>
 </section>
-<section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="programs-grid programs-grid-preview">{% for p in programs %}<article class="program-card program-list-card"><div class="program-card-head"><span class="ui-icon program-card-icon {{ p.slug|program_icon }}" aria-hidden="true"></span><h3>{{ p.title }}</h3></div><p class="program-description">{{ p.short_description }}</p><a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a></article>{% endfor %}</div></div></section>
-<section class="section"><div class="container"><h2 class="page-title">Новости центра</h2><div class="news-grid news-grid-preview">{% for n in news %}<article class="news-card news-list-card"><time class="news-date" datetime="{{ n.created_at }}">{{ n.created_at|format_date }}</time><h3>{{ n.title }}</h3><p class="news-teaser">{{ n.teaser }}</p></article>{% endfor %}</div></div></section>
-<section class="section section-final-cta"><div class="container"><div class="cta-band cta-band-final"><div><h2 class="page-title" style="margin:0 0 8px;">Подберем программу под возраст и цель ребенка</h2><p class="section-lead" style="margin:0;">Оставьте заявку — администратор уточнит детали и предложит удобное время.</p></div><a href="{{ url_for('contacts') }}" class="btn btn-full" data-application-trigger>Оставить заявку</a></div></div></section>
+<section class="section section-lite">
+    <div class="container">
+        <h2 class="page-title">Популярные программы</h2>
+        <div class="programs-grid programs-grid-preview">
+            {% for p in programs %}
+                <article class="program-card program-list-card">
+                    <div class="program-card-head"><span class="ui-icon program-card-icon {{ p.slug|program_icon }}" aria-hidden="true"></span><h3>{{ p.title }}</h3></div>
+                    <p class="program-description">{{ p.short_description }}</p>
+                    <a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="container">
+        <h2 class="page-title">Новости центра</h2>
+        <div class="news-grid news-grid-preview">
+            {% for n in news %}
+                <article class="news-card news-list-card"><time class="news-date" datetime="{{ n.created_at }}">{{ n.created_at|format_date }}</time><h3>{{ n.title }}</h3><p class="news-teaser">{{ n.teaser }}</p></article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<section class="section section-final-cta">
+    <div class="container">
+        <div class="cta-band cta-band-final">
+            <div>
+                <span class="cta-label">Быстрый подбор</span>
+                <h2 class="page-title">Подберем программу под возраст и цель ребенка</h2>
+                <p class="section-lead">Оставьте заявку — администратор уточнит детали и предложит удобное время.</p>
+            </div>
+            <a href="{{ url_for('contacts') }}" class="btn btn-full" data-application-trigger>Оставить заявку</a>
+        </div>
+    </div>
+</section>
 {% endblock %}

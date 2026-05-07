@@ -53,7 +53,7 @@
 
 <div class="modal-overlay" id="application-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="application-modal-title">
     <div class="modal-card">
-        <button class="modal-close" type="button" aria-label="Закрыть" data-modal-close>&times;</button>
+        <button class="modal-close" type="button" aria-label="Закрыть" data-modal-close><span aria-hidden="true">×</span></button>
         <div data-application-form-view>
             <h2 class="modal-title" id="application-modal-title">Оставить заявку</h2>
             <p class="modal-text">Укажите телефон — администратор свяжется с вами и подберёт удобное время.</p>
@@ -74,16 +74,18 @@
                 <button class="btn btn-full" type="submit">Отправить заявку</button>
             </form>
         </div>
-        <div class="form-success modal-success" data-application-success hidden>
-            <strong>Заявка отправлена</strong>
-            <span>Администратор свяжется с вами в ближайшее время.</span>
+        <div class="modal-success" data-application-success hidden>
+            <span class="success-icon" aria-hidden="true"></span>
+            <h2 class="modal-title">Заявка отправлена</h2>
+            <p class="modal-text">Администратор свяжется с вами в ближайшее время.</p>
+            <button class="btn btn-full" type="button" data-modal-close>Закрыть</button>
         </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="login-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
     <div class="modal-card">
-        <button class="modal-close" type="button" aria-label="Закрыть" data-modal-close>&times;</button>
+        <button class="modal-close" type="button" aria-label="Закрыть" data-modal-close><span aria-hidden="true">×</span></button>
         <h2 class="modal-title" id="login-modal-title">Личный кабинет</h2>
         <p class="modal-text">Войдите, чтобы открыть профиль.</p>
         <form class="modal-form" action="{{ url_for('login') }}" method="post" data-login-form novalidate>
@@ -97,8 +99,40 @@
                 <input class="form-input" id="login-password" name="password" type="password" autocomplete="current-password" required>
             </div>
             <button class="btn btn-full" type="submit">Войти</button>
-            <a class="btn btn-outline" href="{{ url_for('register') }}">Зарегистрироваться</a>
+            <a class="btn btn-outline" href="{{ url_for('register') }}" data-register-trigger>Зарегистрироваться</a>
         </form>
+    </div>
+</div>
+
+<div class="modal-overlay" id="register-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="register-modal-title">
+    <div class="modal-card">
+        <button class="modal-close" type="button" aria-label="Закрыть" data-modal-close><span aria-hidden="true">×</span></button>
+        <div data-register-form-view>
+            <h2 class="modal-title" id="register-modal-title">Регистрация</h2>
+            <p class="modal-text">Создайте аккаунт родителя, чтобы пользоваться личным кабинетом.</p>
+            <form class="modal-form" action="{{ url_for('register') }}" method="post" data-register-form novalidate>
+                <div class="form-error" data-form-error hidden></div>
+                <div class="form-field">
+                    <label for="register-name">Имя</label>
+                    <input class="form-input" id="register-name" name="name" type="text" autocomplete="name" placeholder="Ваше имя" required>
+                </div>
+                <div class="form-field">
+                    <label for="register-email">E-mail</label>
+                    <input class="form-input" id="register-email" name="email" type="email" autocomplete="email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-field">
+                    <label for="register-password">Пароль</label>
+                    <input class="form-input" id="register-password" name="password" type="password" autocomplete="new-password" placeholder="Не менее 6 символов" required>
+                </div>
+                <button class="btn btn-full" type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+        <div class="modal-success" data-register-success hidden>
+            <span class="success-icon" aria-hidden="true"></span>
+            <h2 class="modal-title">Регистрация завершена</h2>
+            <p class="modal-text">Теперь вы можете войти в личный кабинет.</p>
+            <button class="btn btn-full" type="button" data-open-login>Войти</button>
+        </div>
     </div>
 </div>
 

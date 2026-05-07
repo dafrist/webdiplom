@@ -1999,3 +1999,353 @@ body.modal-open {
         grid-template-columns: 1fr;
     }
 }
+
+/* Final UI polish */
+.section {
+    padding: 56px 0;
+}
+
+.section + .section,
+.section-lite,
+.section-photos {
+    padding-top: 56px;
+}
+
+.site-header {
+    z-index: 80;
+    background: #FFFFFF;
+    backdrop-filter: none;
+}
+
+.site-header.is-scrolled {
+    background: #FFFFFF;
+}
+
+.hero-inner-lite {
+    grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
+}
+
+.hero-actions .btn {
+    min-width: 190px;
+    min-height: 46px;
+    padding: 12px 20px;
+}
+
+.hero-summary-card {
+    width: 100%;
+    max-width: 390px;
+    margin-left: auto;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: #FFFFFF;
+}
+
+.hero-summary-item {
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    gap: 2px 12px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.hero-summary-item:first-child {
+    padding-top: 0;
+}
+
+.hero-summary-item:last-child {
+    padding-bottom: 0;
+    border-bottom: 0;
+}
+
+.hero-summary-item .ui-icon {
+    grid-row: span 2;
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+}
+
+.hero-summary-item strong {
+    line-height: 1.2;
+}
+
+.hero-summary-item span:last-child {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.card,
+.news-card,
+.program-card,
+.step-card,
+.gallery-card {
+    height: 100%;
+}
+
+.feature-card,
+.program-preview-card,
+.result-card,
+.step-card,
+.news-list-card,
+.program-list-card {
+    min-height: 100%;
+}
+
+.program-list-card > .btn,
+.news-list-card > .btn {
+    margin-top: auto;
+}
+
+.feature-card::after,
+.program-preview-card::after,
+.result-card::after {
+    content: "";
+    width: 42px;
+    height: 1px;
+    margin-top: auto;
+    background: var(--border);
+}
+
+.cta-band {
+    margin-top: 0;
+    align-items: center;
+    padding: 30px;
+}
+
+.cta-band-final {
+    background: #FFFFFF;
+    border-color: var(--border);
+}
+
+.cta-band-final .page-title {
+    margin: 6px 0 8px;
+}
+
+.cta-band-final .section-lead {
+    margin: 0;
+}
+
+.cta-band-final .btn {
+    width: auto;
+    min-width: 190px;
+    flex: 0 0 auto;
+}
+
+.cta-label {
+    display: inline-flex;
+    padding: 5px 10px;
+    border: 1px solid rgba(216, 107, 31, 0.24);
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.modal-overlay {
+    z-index: 200;
+}
+
+.modal-card {
+    border-radius: 14px;
+    padding: 30px;
+}
+
+.modal-close,
+.discount-popup__close {
+    top: 14px;
+    right: 14px;
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #81766B;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.modal-close:hover,
+.discount-popup__close:hover {
+    background: transparent;
+    border-color: transparent;
+    color: var(--accent-hover);
+}
+
+.modal-close:focus,
+.modal-close:focus-visible,
+.discount-popup__close:focus,
+.discount-popup__close:focus-visible {
+    outline: none;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.modal-success {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 4px 0 0;
+    color: var(--text);
+}
+
+.modal-success[hidden],
+[data-register-form-view][hidden] {
+    display: none;
+}
+
+.modal-success .modal-title {
+    margin: 0 34px 0 0;
+}
+
+.modal-success .modal-text {
+    margin: 0;
+}
+
+.success-icon {
+    width: 42px;
+    height: 42px;
+    border: 1px solid #B7DBC1;
+    border-radius: 12px;
+    background: #F7FCF8;
+    color: #2F7D46;
+    position: relative;
+}
+
+.success-icon::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    inset: 10px;
+    background: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m20 6-11 11-5-5'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24'%3E%3Cpath d='m20 6-11 11-5-5'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.form-error,
+.form-errors {
+    border-color: rgba(220, 38, 38, 0.30);
+    background: #FFF8F8;
+    color: #B91C1C;
+}
+
+.form-success {
+    border-color: var(--border);
+    background: #FFFFFF;
+    color: var(--text);
+}
+
+.gallery-image,
+.photo-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    background: #F7F4EF;
+}
+
+.gallery-placeholder-text,
+.photo-card::after {
+    position: absolute;
+    left: 50%;
+    top: calc(50% + 36px);
+    transform: translateX(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.photo-card::after {
+    content: "Фото скоро появится";
+    z-index: 0;
+}
+
+.gallery-image img,
+.photo-card img {
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    object-fit: cover;
+}
+
+.gallery-image img + .gallery-placeholder-text,
+.gallery-image:has(img) .gallery-placeholder-text {
+    display: none;
+}
+
+.logo {
+    min-width: 0;
+}
+
+.footer-grid {
+    align-items: start;
+}
+
+.footer-brand {
+    max-width: 380px;
+}
+
+@media (max-width: 1024px) {
+    .hero-inner-lite {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hero-summary-card {
+        max-width: none;
+        margin-left: 0;
+    }
+
+    .hero-visual,
+    .hero-visual-lite {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 700px) {
+    .section,
+    .section + .section,
+    .section-lite,
+    .section-photos {
+        padding: 38px 0;
+    }
+
+    .hero-actions .btn,
+    .cta-band-final .btn {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .cta-band {
+        align-items: stretch;
+    }
+
+    .modal-card {
+        padding: 24px 20px;
+    }
+
+    .footer-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+.gallery-image {
+    height: 230px;
+}
+
+.gallery-image img {
+    height: 230px;
+}
+
+.photo-card img {
+    height: 220px;
+    min-height: 220px;
+}

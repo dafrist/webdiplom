@@ -11,7 +11,7 @@ function openModal(id) {
     document.body.classList.add('modal-open');
     activeModal = modal;
 
-    const firstField = modal.querySelector('input, textarea, select, button');
+    const firstField = modal.querySelector('input, textarea, select') || modal.querySelector('button, a');
     if (firstField) firstField.focus({ preventScroll: true });
 }
 
@@ -92,16 +92,42 @@ function setupApplicationTriggers() {
     });
 }
 
+function resetLoginModal() {
+    const form = document.querySelector('[data-login-form]');
+    if (form) {
+        form.reset();
+        setFormMessage(form, '');
+    }
+}
+
+function resetRegisterModal() {
+    const form = document.querySelector('[data-register-form]');
+    const formView = document.querySelector('[data-register-form-view]');
+    const successView = document.querySelector('[data-register-success]');
+    if (form) {
+        form.reset();
+        setFormMessage(form, '');
+    }
+    if (formView) formView.hidden = false;
+    if (successView) successView.hidden = true;
+}
+
 function setupLoginTrigger() {
-    document.querySelectorAll('[data-login-trigger]').forEach((element) => {
+    document.querySelectorAll('[data-login-trigger], [data-open-login]').forEach((element) => {
         element.addEventListener('click', (event) => {
             event.preventDefault();
-            const form = document.querySelector('[data-login-form]');
-            if (form) {
-                form.reset();
-                setFormMessage(form, '');
-            }
+            resetLoginModal();
             openModal('login-modal');
+        });
+    });
+}
+
+function setupRegisterTrigger() {
+    document.querySelectorAll('[data-register-trigger]').forEach((element) => {
+        element.addEventListener('click', (event) => {
+            event.preventDefault();
+            resetRegisterModal();
+            openModal('register-modal');
         });
     });
 }
@@ -160,6 +186,48 @@ function setupApplicationForm() {
     });
 }
 
+function setupRegisterForm() {
+    const form = document.querySelector('[data-register-form]');
+    if (!form) return;
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        setFormMessage(form, '');
+        const name = form.querySelector('[name="name"]');
+        const email = form.querySelector('[name="email"]');
+        const password = form.querySelector('[name="password"]');
+        if (!name.value.trim() || !email.value.trim() || password.value.length < 6) {
+            setFormMessage(form, 'Заполните имя, email и пароль от 6 символов.');
+            (!name.value.trim() ? name : (!email.value.trim() ? email : password)).focus();
+            return;
+        }
+
+        const submitButton = form.querySelector('[type="submit"]');
+        if (submitButton) submitButton.disabled = true;
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form),
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok || data.ok === false) {
+                setFormMessage(form, data.error || 'Не удалось завершить регистрацию.');
+                return;
+            }
+            form.reset();
+            const formView = document.querySelector('[data-register-form-view]');
+            const successView = document.querySelector('[data-register-success]');
+            if (formView) formView.hidden = true;
+            if (successView) successView.hidden = false;
+        } catch (error) {
+            setFormMessage(form, 'Не удалось завершить регистрацию. Проверьте подключение и попробуйте ещё раз.');
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
+}
+
 function setupLoginForm() {
     const form = document.querySelector('[data-login-form]');
     if (!form) return;
@@ -209,9 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setupModalControls();
     setupApplicationTriggers();
     setupLoginTrigger();
+    setupRegisterTrigger();
     setupPhoneMask();
     setupApplicationForm();
     setupLoginForm();
+    setupRegisterForm();
 
     const popup = document.querySelector('[data-discount-popup]');
     const closeBtn = document.querySelector('[data-discount-popup-close]');
