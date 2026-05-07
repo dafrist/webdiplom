@@ -27,9 +27,13 @@
             <a href="{{ url_for('gallery') }}" class="{{ 'is-current' if active == 'gallery' else '' }}">Фотогалерея</a>
             <a href="{{ url_for('contacts') }}" class="{{ 'is-current' if active == 'contacts' else '' }}">Контакты</a>
             <a href="{{ url_for('news') }}" class="{{ 'is-current' if active == 'news' else '' }}">Новости</a>
-            <a href="{{ url_for('profile' if current_user else 'login') }}" class="{{ 'is-current' if active == 'profile' else '' }}">Личный кабинет</a>
+            {% if current_user %}
+                <a href="{{ url_for('profile') }}" class="{{ 'is-current' if active == 'profile' else '' }}">Личный кабинет</a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="{{ 'is-current' if active == 'profile' else '' }}" data-login-trigger>Личный кабинет</a>
+            {% endif %}
         </nav>
-        <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-application">Онлайн-заявка</a>
+        <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-application" data-application-trigger>Онлайн-заявка</a>
     </div>
 </header>
 <main>
@@ -46,6 +50,58 @@
     {% endwith %}
     {% block content %}{% endblock %}
 </main>
+
+<div class="modal-overlay" id="application-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="application-modal-title">
+    <div class="modal-card">
+        <button class="modal-close" type="button" aria-label="Закрыть" data-modal-close>&times;</button>
+        <div data-application-form-view>
+            <h2 class="modal-title" id="application-modal-title">Оставить заявку</h2>
+            <p class="modal-text">Укажите телефон — администратор свяжется с вами и подберёт удобное время.</p>
+            <form class="modal-form" action="{{ url_for('application') }}" method="post" data-application-form novalidate>
+                <div class="form-error" data-form-error hidden></div>
+                <div class="form-field">
+                    <label for="application-parent-name">Имя родителя</label>
+                    <input class="form-input" id="application-parent-name" name="parent_name" type="text" autocomplete="name" placeholder="Ваше имя">
+                </div>
+                <div class="form-field">
+                    <label for="application-phone">Телефон</label>
+                    <input class="form-input" id="application-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+7 (999) 999-99-99" required data-phone-input>
+                </div>
+                <div class="form-field">
+                    <label for="application-comment">Комментарий</label>
+                    <textarea class="form-input" id="application-comment" name="comment" placeholder="Возраст ребёнка и интересующая программа"></textarea>
+                </div>
+                <button class="btn btn-full" type="submit">Отправить заявку</button>
+            </form>
+        </div>
+        <div class="form-success modal-success" data-application-success hidden>
+            <strong>Заявка отправлена</strong>
+            <span>Администратор свяжется с вами в ближайшее время.</span>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="login-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+    <div class="modal-card">
+        <button class="modal-close" type="button" aria-label="Закрыть" data-modal-close>&times;</button>
+        <h2 class="modal-title" id="login-modal-title">Личный кабинет</h2>
+        <p class="modal-text">Войдите, чтобы открыть профиль.</p>
+        <form class="modal-form" action="{{ url_for('login') }}" method="post" data-login-form novalidate>
+            <div class="form-error" data-form-error hidden></div>
+            <div class="form-field">
+                <label for="login-email">E-mail</label>
+                <input class="form-input" id="login-email" name="email" type="email" autocomplete="email" required>
+            </div>
+            <div class="form-field">
+                <label for="login-password">Пароль</label>
+                <input class="form-input" id="login-password" name="password" type="password" autocomplete="current-password" required>
+            </div>
+            <button class="btn btn-full" type="submit">Войти</button>
+            <a class="btn btn-outline" href="{{ url_for('register') }}">Зарегистрироваться</a>
+        </form>
+    </div>
+</div>
+
 <footer class="site-footer">
     <div class="container footer-inner">
         <div>© 2026 Умники и Умницы · детский центр развития личности</div>
