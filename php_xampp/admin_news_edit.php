@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <?php if ($success): ?>
         <div class="form-success">
-          Сохранено ✅ <a href="admin_news.php">Вернуться к списку</a> или <a href="news.php">открыть новости</a>.
+          Сохранено <a href="admin_news.php">Вернуться к списку</a> или <a href="news.php">открыть новости</a>.
         </div>
       <?php endif; ?>
 

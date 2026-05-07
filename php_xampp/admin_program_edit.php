@@ -145,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <?php if ($success): ?>
         <div class="form-success">
-          Сохранено ✅ <a href="admin_programs.php">Вернуться к списку</a> или <a href="program.php?slug=<?php echo urlencode($data['slug']); ?>">открыть на сайте</a>.
+          Сохранено <a href="admin_programs.php">Вернуться к списку</a> или <a href="program.php?slug=<?php echo urlencode($data['slug']); ?>">открыть на сайте</a>.
         </div>
       <?php endif; ?>
 
