@@ -1,3 +1,20 @@
 {% extends 'base.html' %}
 {% block title %}Новость — Админ{% endblock %}
-{% block content %}<section class="section section-alt"><div class="container"><h1 class="page-title">{{ 'Редактировать' if item else 'Добавить' }} новость</h1><div class="form-card"><form method="post"><div class="field"><label>Заголовок</label><input name="title" value="{{ item.title if item else '' }}" required></div><div class="field"><label>Slug</label><input name="slug" value="{{ item.slug if item else '' }}" required></div><div class="field"><label>Анонс</label><textarea name="teaser">{{ item.teaser if item else '' }}</textarea></div><div class="field"><label>Текст</label><textarea name="body">{{ item.body if item else '' }}</textarea></div><label><input type="checkbox" name="is_published" {% if not item or item.is_published %}checked{% endif %}> Опубликовано</label><br><button class="btn btn-full" type="submit">Сохранить</button><a class="btn btn-outline" href="{{ url_for('admin_news') }}">Отмена</a></form></div></div></section>{% endblock %}
+{% block content %}
+<section class="section section-alt admin-section">
+    <div class="container">
+        <div class="breadcrumbs"><a href="{{ url_for('admin') }}">Админ-панель</a> · <a href="{{ url_for('admin_news') }}">Новости</a></div>
+        <h1 class="page-title">{{ 'Редактировать' if item else 'Добавить' }} новость</h1>
+        <div class="form-card admin-form-card">
+            <form method="post">
+                <div class="field"><label for="title">Заголовок</label><input id="title" name="title" value="{{ item.title if item else '' }}" required></div>
+                <div class="field"><label for="slug">Slug</label><input id="slug" name="slug" value="{{ item.slug if item else '' }}" required></div>
+                <div class="field"><label for="teaser">Анонс</label><textarea id="teaser" name="teaser">{{ item.teaser if item else '' }}</textarea></div>
+                <div class="field"><label for="body">Текст</label><textarea id="body" name="body">{{ item.body if item else '' }}</textarea></div>
+                <label class="check-row"><input type="checkbox" name="is_published" {% if not item or item.is_published %}checked{% endif %}> Опубликовано</label>
+                <div class="form-actions"><button class="btn btn-full" type="submit">Сохранить</button><a class="btn btn-outline" href="{{ url_for('admin_news') }}">Отмена</a></div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

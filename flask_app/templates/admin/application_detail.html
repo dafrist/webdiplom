@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Админ · Заявка №{{ item.id }}{% endblock %}
+{% block content %}
+<section class="section section-alt admin-section">
+    <div class="container">
+        <div class="breadcrumbs"><a href="{{ url_for('admin') }}">Админ-панель</a> · <a href="{{ url_for('admin_applications') }}">Заявки</a> · №{{ item.id }}</div>
+        <div class="admin-detail-grid">
+            <article class="card admin-detail-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">Заявка №{{ item.id }}</p>
+                        <h1 class="page-title">Просмотр заявки</h1>
+                    </div>
+                    <span class="badge badge-{{ item.status }}">{{ item.status|status_label }}</span>
+                </div>
+                <dl class="profile-details application-details">
+                    <div><dt>Дата</dt><dd>{{ item.created_at|format_date }}</dd></div>
+                    <div><dt>Имя родителя</dt><dd>{{ item.parent_name or 'Не указано' }}</dd></div>
+                    <div><dt>Телефон</dt><dd>{{ item.phone }}</dd></div>
+                    <div><dt>Пользователь</dt><dd>{{ item.user_name or item.user_email or 'Не привязана к аккаунту' }}</dd></div>
+                    <div class="details-wide"><dt>Комментарий</dt><dd>{{ item.comment or 'Комментарий не указан' }}</dd></div>
+                </dl>
+            </article>
+
+            <aside class="form-card admin-status-card">
+                <h2>Сменить статус</h2>
+                <form method="post">
+                    <div class="field">
+                        <label for="status">Статус заявки</label>
+                        <select id="status" name="status">
+                            {% for value, label in statuses.items() %}
+                                <option value="{{ value }}" {% if item.status == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button class="btn btn-full" type="submit">Сохранить статус</button>
+                    <a class="btn btn-outline" href="{{ url_for('admin_applications') }}">К списку заявок</a>
+                </form>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}
