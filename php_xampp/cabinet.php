@@ -21,8 +21,8 @@ if (!$userId) {
     <meta charset="UTF-8">
     <title>Личный кабинет — «Умники и Умницы»</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css">
-    <script defer src="js/main.js"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script defer src="assets/js/main.js"></script>
 </head>
 <body>
 

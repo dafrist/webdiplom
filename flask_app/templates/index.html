@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Умники и Умницы — детский центр развития личности{% endblock %}
+{% block content %}
+<section class="section section-hero">
+    <div class="container hero-inner hero-inner-lite">
+        <div>
+            <div class="hero-eyebrow">👶 3–10 лет · г. Уфа</div>
+            <h1 class="hero-title">Детский центр, куда дети идут с радостью</h1>
+            <p class="hero-subtitle">Развивающие занятия, логопед, психолог, подготовка к школе. Уютная атмосфера и индивидуальный подход.</p>
+            <div class="hero-actions">
+                <a href="{{ url_for('contacts') }}" class="btn btn-full">Оставить заявку</a>
+                <a href="{{ url_for('programs') }}" class="btn btn-outline">Посмотреть программы</a>
+            </div>
+            <div class="hero-shortcuts">
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">🧩</span><span>Мини‑группы</span></a>
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">🗣️</span><span>Развитие речи</span></a>
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">📚</span><span>К школе</span></a>
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">💛</span><span>Психолог</span></a>
+            </div>
+        </div>
+        <div class="hero-visual hero-visual-lite"><div class="hero-card hero-card-lite"><div class="hero-stickers"><span class="sticker s1">🧸</span><span class="sticker s2">🎨</span><span class="sticker s3">✏️</span><span class="sticker s4">⭐</span></div><div class="hero-badges"><div class="hero-badge">👩‍🏫 Малые группы<br><strong>до 8 детей</strong></div><div class="hero-badge">🕒 Удобный график<br><strong>подберём время</strong></div></div></div></div>
+    </div>
+</section>
+<section class="section section-photos">
+    <div class="container">
+        <h2 class="page-title" style="margin:0;">Наша атмосфера ✨</h2>
+        <p class="section-lead">Немного настроения центра: игры, творчество и подготовка к школе.</p>
+        <div class="photo-strip">
+            <a class="photo-card" href="{{ url_for('gallery') }}"><img src="{{ url_for('static', filename='images/photo_1.png') }}" alt="Мини-группы"></a>
+            <a class="photo-card" href="{{ url_for('gallery') }}"><img src="{{ url_for('static', filename='images/photo_2.png') }}" alt="Творчество"></a>
+            <a class="photo-card" href="{{ url_for('gallery') }}"><img src="{{ url_for('static', filename='images/photo_3.png') }}" alt="Подготовка к школе"></a>
+        </div>
+    </div>
+</section>
+<section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="cards-row">{% for p in programs %}<article class="program-card"><h3>{{ p.slug|emoji }} {{ p.title }}</h3><p>{{ p.short_description }}</p><a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a></article>{% endfor %}</div></div></section>
+<section class="section"><div class="container"><h2 class="page-title">Новости центра</h2><div class="cards-row">{% for n in news %}<article class="news-card"><h3>{{ n.title }}</h3><p>{{ n.teaser }}</p></article>{% endfor %}</div></div></section>
+{% endblock %}

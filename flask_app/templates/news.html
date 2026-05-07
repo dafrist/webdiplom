@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}Новости — Умники и Умницы{% endblock %}
+{% block content %}<section class="section section-alt"><div class="container"><div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · Новости</div><h1 class="page-title">Новости центра</h1><p class="section-lead">Анонсы занятий, важные объявления и события.</p><div class="cards-row">{% for n in news_list %}<article class="news-card"><h3>{{ n.title }}</h3><p class="news-meta">{{ n.created_at }}</p><p>{{ n.teaser }}</p><p>{{ n.body }}</p></article>{% else %}<p>Пока нет опубликованных новостей.</p>{% endfor %}</div></div></section>{% endblock %}
