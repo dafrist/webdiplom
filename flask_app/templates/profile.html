@@ -7,11 +7,11 @@
             <div>
                 <p class="eyebrow">Личный кабинет родителя</p>
                 <h1 class="page-title">Здравствуйте, {{ current_user.name }}!</h1>
-                <p class="section-lead">Здесь можно отслеживать заявки, смотреть рекомендации и быстро записаться на консультацию.</p>
+                <p class="section-lead">Управляйте данными детей, расписанием, прогрессом и заявками в одном спокойном кабинете.</p>
             </div>
             <div class="profile-actions profile-actions-hero">
                 <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
-                <a class="btn btn-outline" href="{{ url_for('programs') }}">Посмотреть программы</a>
+                <a class="btn btn-secondary" href="{{ url_for('programs') }}">Посмотреть программы</a>
             </div>
         </div>
 
@@ -32,26 +32,57 @@
                     <div><dt>Дата регистрации</dt><dd>{{ current_user.created_at|format_date }}</dd></div>
                 </dl>
                 {% if current_user.role == 'admin' %}
-                    <a class="btn btn-outline" href="{{ url_for('admin') }}">Открыть админ-панель</a>
+                    <a class="btn btn-secondary" href="{{ url_for('admin') }}">Открыть админ-панель</a>
                 {% endif %}
             </article>
 
-            <article class="card profile-card child-card">
+            <section class="card profile-card child-card">
                 <div class="card-heading">
                     <div>
-                        <p class="eyebrow">Ребенок</p>
-                        <h2>Данные ребенка</h2>
+                        <p class="eyebrow">Дети</p>
+                        <h2>Мои дети</h2>
                     </div>
-                    <span class="badge badge-muted">Заполняется после заявки</span>
+                    <button class="btn btn-sm btn-full" type="button" data-panel-toggle="child-form">Добавить ребенка</button>
                 </div>
-                <p class="profile-muted">Оставьте заявку — администратор уточнит возраст ребенка и подберет подходящую программу.</p>
-                <dl class="profile-details profile-details-compact">
-                    <div><dt>Направление</dt><dd>Подбирается</dd></div>
-                    <div><dt>Статус</dt><dd>Ожидает заявки</dd></div>
-                    <div><dt>Рекомендованная программа</dt><dd>Будет назначена после консультации</dd></div>
-                </dl>
-                <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
-            </article>
+                <div class="profile-form-panel" id="child-form" hidden>
+                    <form class="profile-inline-form" action="{{ url_for('add_child') }}" method="post">
+                        <div class="form-field"><label for="child-name">Имя ребенка</label><input class="form-input" id="child-name" name="name" required></div>
+                        <div class="form-field"><label for="child-age">Возраст</label><input class="form-input" id="child-age" name="age" type="number" min="0" max="18"></div>
+                        <div class="form-field"><label for="child-direction">Интересующее направление</label><input class="form-input" id="child-direction" name="direction" placeholder="Например, чтение или логопед"></div>
+                        <div class="form-field form-field-wide"><label for="child-notes">Комментарий/особенности</label><textarea class="form-input" id="child-notes" name="notes" rows="3"></textarea></div>
+                        <button class="btn btn-full" type="submit">Сохранить ребенка</button>
+                    </form>
+                </div>
+                {% if children %}
+                    <div class="children-list">
+                        {% for child in children %}
+                            <details class="child-item">
+                                <summary>
+                                    <span><strong>{{ child.name }}</strong>{% if child.age %}<small>{{ child.age }} лет</small>{% endif %}</span>
+                                    <span class="child-direction">{{ child.direction or 'Направление не указано' }}</span>
+                                </summary>
+                                <form class="profile-inline-form" action="{{ url_for('update_child', child_id=child.id) }}" method="post">
+                                    <div class="form-field"><label for="child-name-{{ child.id }}">Имя ребенка</label><input class="form-input" id="child-name-{{ child.id }}" name="name" value="{{ child.name }}" required></div>
+                                    <div class="form-field"><label for="child-age-{{ child.id }}">Возраст</label><input class="form-input" id="child-age-{{ child.id }}" name="age" type="number" min="0" max="18" value="{{ child.age or '' }}"></div>
+                                    <div class="form-field"><label for="child-direction-{{ child.id }}">Интересующее направление</label><input class="form-input" id="child-direction-{{ child.id }}" name="direction" value="{{ child.direction or '' }}"></div>
+                                    <div class="form-field form-field-wide"><label for="child-notes-{{ child.id }}">Комментарий/особенности</label><textarea class="form-input" id="child-notes-{{ child.id }}" name="notes" rows="3">{{ child.notes or '' }}</textarea></div>
+                                    <div class="profile-form-actions">
+                                        <button class="btn btn-full" type="submit">Сохранить</button>
+                                    </div>
+                                </form>
+                                <form action="{{ url_for('delete_child', child_id=child.id) }}" method="post" onsubmit="return confirm('Удалить ребенка из профиля?');">
+                                    <button class="btn btn-danger-ghost" type="submit">Удалить ребенка</button>
+                                </form>
+                            </details>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="profile-empty-state">
+                        <p>Добавьте данные ребенка, чтобы подобрать подходящие программы.</p>
+                        <button class="btn btn-full" type="button" data-panel-toggle="child-form">Добавить ребенка</button>
+                    </div>
+                {% endif %}
+            </section>
 
             <section class="card profile-card profile-card-wide">
                 <div class="card-heading">
@@ -64,19 +95,13 @@
                 {% if applications %}
                     <div class="table-wrapper profile-table-wrapper">
                         <table class="data-table profile-table">
-                            <thead>
-                                <tr>
-                                    <th>Дата</th>
-                                    <th>Телефон</th>
-                                    <th>Комментарий</th>
-                                    <th>Статус</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th>Дата</th><th>Телефон</th><th>Имя родителя</th><th>Комментарий</th><th>Статус</th></tr></thead>
                             <tbody>
                                 {% for application in applications %}
                                     <tr>
                                         <td>{{ application.created_at|format_date }}</td>
                                         <td>{{ application.phone }}</td>
+                                        <td>{{ application.parent_name or current_user.name }}</td>
                                         <td>{{ application.comment or 'Комментарий не указан' }}</td>
                                         <td><span class="badge badge-{{ application.status }}">{{ application.status|status_label }}</span></td>
                                     </tr>
@@ -87,7 +112,7 @@
                 {% else %}
                     <div class="profile-empty-state">
                         <h3>Заявок пока нет</h3>
-                        <p>После отправки формы заявка появится здесь, а администратор сможет уточнить детали по телефону.</p>
+                        <p>После отправки формы заявка сразу появится здесь.</p>
                         <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
                     </div>
                 {% endif %}
@@ -97,16 +122,33 @@
                 <div class="card-heading">
                     <div>
                         <p class="eyebrow">Расписание</p>
-                        <h2>Расписание занятий</h2>
+                        <h2>Мое расписание</h2>
                     </div>
+                    <button class="btn btn-sm btn-full" type="button" data-panel-toggle="schedule-form">Добавить занятие</button>
                 </div>
-                {% if applications %}
+                <div class="profile-form-panel" id="schedule-form" hidden>
+                    <form class="profile-inline-form" action="{{ url_for('add_schedule_item') }}" method="post">
+                        <div class="form-field"><label for="schedule-title">Название</label><input class="form-input" id="schedule-title" name="title" required></div>
+                        <div class="form-field"><label for="schedule-weekday">День недели</label><input class="form-input" id="schedule-weekday" name="weekday" placeholder="Понедельник" required></div>
+                        <div class="form-field"><label for="schedule-time">Время</label><input class="form-input" id="schedule-time" name="time" type="time" required></div>
+                        <div class="form-field"><label for="schedule-child">Ребенок</label><select class="form-input" id="schedule-child" name="child_id"><option value="">Без привязки</option>{% for child in children %}<option value="{{ child.id }}">{{ child.name }}</option>{% endfor %}</select></div>
+                        <div class="form-field form-field-wide"><label for="schedule-note">Заметка</label><textarea class="form-input" id="schedule-note" name="note" rows="3"></textarea></div>
+                        <button class="btn btn-full" type="submit">Добавить занятие</button>
+                    </form>
+                </div>
+                {% if schedule_items %}
                     <ul class="profile-list schedule-list">
-                        <li><span>Пн, 17:00</span><strong>Подготовка к школе</strong></li>
-                        <li><span>Ср, 18:00</span><strong>Развитие речи</strong></li>
+                        {% for item in schedule_items %}
+                            <li>
+                                <span>{{ item.weekday }}, {{ item.time }}</span>
+                                <strong>{{ item.title }}</strong>
+                                <small>{{ item.child_name or item.note or 'Личная запись' }}</small>
+                                <form action="{{ url_for('delete_schedule_item', item_id=item.id) }}" method="post"><button class="btn btn-sm btn-danger-ghost" type="submit">Удалить</button></form>
+                            </li>
+                        {% endfor %}
                     </ul>
                 {% else %}
-                    <p class="profile-muted">Расписание появится после подтверждения заявки администратором.</p>
+                    <div class="profile-empty-state"><p>Добавьте занятия, чтобы видеть расписание в личном кабинете.</p></div>
                 {% endif %}
             </section>
 
@@ -116,19 +158,25 @@
                         <p class="eyebrow">Прогресс</p>
                         <h2>Прогресс ребенка</h2>
                     </div>
+                    <button class="btn btn-sm btn-full" type="button" data-panel-toggle="progress-form">Обновить прогресс</button>
                 </div>
-                {% if applications %}
-                    <div class="progress-list">
+                <div class="progress-list">
+                    {% for item in progress_items %}
+                        <div class="progress-item">
+                            <div class="progress-label"><span>{{ item.name }}</span><strong>{{ item.value }}%</strong></div>
+                            <div class="progress-track" aria-label="{{ item.name }} — {{ item.value }}%"><span style="width: {{ item.value }}%;"></span></div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="profile-form-panel progress-form-panel" id="progress-form" hidden>
+                    <form class="profile-inline-form" action="{{ url_for('update_progress') }}" method="post">
+                        <div class="form-field form-field-wide"><label for="progress-child">Ребенок</label><select class="form-input" id="progress-child" name="child_id"><option value="">Общий прогресс</option>{% for child in children %}<option value="{{ child.id }}" {% if progress and progress.child_id == child.id %}selected{% endif %}>{{ child.name }}</option>{% endfor %}</select></div>
                         {% for item in progress_items %}
-                            <div class="progress-item">
-                                <div class="progress-label"><span>{{ item.name }}</span><strong>{{ item.value }}%</strong></div>
-                                <div class="progress-track" aria-label="{{ item.name }} — {{ item.value }}%"><span style="width: {{ item.value }}%;"></span></div>
-                            </div>
+                            <div class="form-field"><label for="progress-{{ item.key }}">{{ item.name }}</label><input class="form-input" id="progress-{{ item.key }}" name="{{ item.key }}" type="number" min="0" max="100" value="{{ item.value }}"></div>
                         {% endfor %}
-                    </div>
-                {% else %}
-                    <p class="profile-muted">Прогресс появится после начала занятий.</p>
-                {% endif %}
+                        <button class="btn btn-full" type="submit">Сохранить прогресс</button>
+                    </form>
+                </div>
             </section>
 
             <section class="card profile-card profile-card-wide">
@@ -137,35 +185,17 @@
                         <p class="eyebrow">Рекомендации</p>
                         <h2>Рекомендуем посмотреть</h2>
                     </div>
-                    <a class="btn btn-outline btn-sm" href="{{ url_for('programs') }}">Все программы</a>
+                    <a class="btn btn-secondary btn-sm" href="{{ url_for('programs') }}">Все программы</a>
                 </div>
                 <div class="program-recommend-grid profile-recommend-grid">
                     {% for program in recommended_programs %}
                         <article class="program-card recommendation-card">
                             <h3>{{ program.title }}</h3>
                             <p>{{ program.short_description }}</p>
-                            <a class="btn btn-outline" href="{{ url_for('contacts') }}" data-application-trigger>Записаться</a>
+                            <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Записаться</a>
                         </article>
                     {% endfor %}
                 </div>
-            </section>
-
-            <section class="card profile-card">
-                <div class="card-heading">
-                    <div>
-                        <p class="eyebrow">Уведомления</p>
-                        <h2>Уведомления</h2>
-                    </div>
-                </div>
-                {% if applications %}
-                    <ul class="profile-list notification-list">
-                        <li>Ваша заявка принята.</li>
-                        <li>Администратор свяжется с вами в ближайшее время.</li>
-                        <li>Рекомендуем посмотреть программы подготовки к школе.</li>
-                    </ul>
-                {% else %}
-                    <p class="profile-muted">Оставьте заявку, чтобы администратор подобрал программу.</p>
-                {% endif %}
             </section>
 
             <section class="card profile-card quick-card">
@@ -175,11 +205,13 @@
                         <h2>Быстрые действия</h2>
                     </div>
                 </div>
-                <div class="quick-actions">
+                <div class="quick-actions-main">
                     <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
-                    <a class="btn btn-outline" href="{{ url_for('programs') }}">Посмотреть программы</a>
-                    <a class="btn btn-outline" href="{{ url_for('news') }}">Новости центра</a>
-                    <a class="btn btn-secondary" href="{{ url_for('logout') }}">Выйти</a>
+                    <a class="btn btn-secondary" href="{{ url_for('programs') }}">Посмотреть программы</a>
+                    <a class="btn btn-secondary" href="{{ url_for('news') }}">Новости центра</a>
+                </div>
+                <div class="quick-actions-logout">
+                    <a class="btn btn-danger-ghost" href="{{ url_for('logout') }}">Выйти</a>
                 </div>
             </section>
         </div>

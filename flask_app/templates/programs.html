@@ -18,7 +18,6 @@
                     <p class="program-age">Возраст: {% if p.age_from or p.age_to %}{{ p.age_from or '' }}–{{ p.age_to or '' }} лет{% else %}по согласованию{% endif %}</p>
                     <p class="program-description">{{ p.short_description }}</p>
                     <div class="program-card-actions">
-                        <a href="{{ url_for('programs') }}#program-{{ p.id }}" class="btn btn-sm btn-outline">Подробнее</a>
                         <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-full" data-application-trigger>Записаться</a>
                     </div>
                 </article>
