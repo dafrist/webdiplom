@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Умники и Умницы{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+<header class="site-header">
+    <div class="container header-inner">
+        <a class="logo" href="{{ url_for('index') }}" style="text-decoration:none;">
+            <div class="logo-circle">у</div>
+            <div class="logo-text">
+                <div class="logo-title">Умники и Умницы</div>
+                <div class="logo-subtitle">центр развития личности</div>
+            </div>
+        </a>
+        <nav class="main-nav">
+            <a href="{{ url_for('index') }}" class="{{ 'is-current' if active == 'index' else '' }}">Главная</a>
+            <a href="{{ url_for('about') }}" class="{{ 'is-current' if active == 'about' else '' }}">О центре</a>
+            <a href="{{ url_for('programs') }}" class="{{ 'is-current' if active == 'programs' else '' }}">Программы</a>
+            <a href="{{ url_for('gallery') }}" class="{{ 'is-current' if active == 'gallery' else '' }}">Фотогалерея</a>
+            <a href="{{ url_for('contacts') }}" class="{{ 'is-current' if active == 'contacts' else '' }}">Контакты</a>
+            <a href="{{ url_for('news') }}" class="{{ 'is-current' if active == 'news' else '' }}">Новости</a>
+            <a href="{{ url_for('profile' if current_user else 'login') }}" class="{{ 'is-current' if active == 'profile' else '' }}">Личный кабинет</a>
+        </nav>
+        <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-outline">Онлайн-заявка</a>
+    </div>
+</header>
+<main>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <section class="section" style="padding-bottom:0;">
+                <div class="container">
+                    {% for category, message in messages %}
+                        <div class="notice notice-{{ category }}" style="margin-bottom:10px;">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+<footer class="site-footer">
+    <div class="container footer-inner">
+        <div>© 2026 Умники и Умницы · детский центр развития личности</div>
+        <div>Уфа · развивающие занятия, логопед, психолог, подготовка к школе</div>
+    </div>
+</footer>
+</body>
+</html>

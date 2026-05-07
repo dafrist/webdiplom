@@ -1,0 +1,3 @@
+{% extends 'base.html' %}
+{% block title %}Фотогалерея — Умники и Умницы{% endblock %}
+{% block content %}<section class="section section-alt"><div class="container"><div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · Фотогалерея</div><h1 class="page-title">Фотогалерея</h1><p class="section-lead">Игры, творчество и тёплая атмосфера нашего центра.</p><div class="photo-strip"><img class="photo-card" src="{{ url_for('static', filename='images/photo_1.png') }}" alt="Мини-группы"><img class="photo-card" src="{{ url_for('static', filename='images/photo_2.png') }}" alt="Творчество"><img class="photo-card" src="{{ url_for('static', filename='images/photo_3.png') }}" alt="Подготовка к школе"></div></div></section>{% endblock %}
