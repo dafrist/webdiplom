@@ -83,10 +83,13 @@ def init_db() -> None:
         );
         CREATE TABLE IF NOT EXISTS applications (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
             parent_name TEXT,
             phone TEXT NOT NULL,
             comment TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            status TEXT NOT NULL DEFAULT 'new',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
         );
         """
     )
@@ -106,8 +109,47 @@ def init_db() -> None:
             "INSERT OR IGNORE INTO news (title, slug, teaser, body) VALUES (?, ?, ?, ?)",
             item,
         )
+    ensure_application_schema(db)
     db.commit()
     db.close()
+
+
+def ensure_application_schema(db: sqlite3.Connection) -> None:
+    db.execute(
+        """
+        CREATE TABLE IF NOT EXISTS applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            parent_name TEXT,
+            phone TEXT NOT NULL,
+            comment TEXT,
+            status TEXT NOT NULL DEFAULT 'new',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );
+        """
+    )
+    columns = {row[1] for row in db.execute("PRAGMA table_info(applications)").fetchall()}
+    if "user_id" not in columns:
+        db.execute("ALTER TABLE applications ADD COLUMN user_id INTEGER")
+    if "status" not in columns:
+        db.execute("ALTER TABLE applications ADD COLUMN status TEXT NOT NULL DEFAULT 'new'")
+
+
+APPLICATION_STATUSES = {
+    "new": "Новая",
+    "processing": "В работе",
+    "completed": "Завершена",
+}
+
+
+def status_label(status: str | None) -> str:
+    return APPLICATION_STATUSES.get(status or "new", "Новая")
+
+
+@app.template_filter("status_label")
+def status_label_filter(status: str | None) -> str:
+    return status_label(status)
 
 
 def current_user():
@@ -136,9 +178,12 @@ def admin_required(view):
     @wraps(view)
     def wrapped_view(*args, **kwargs):
         user = current_user()
-        if user is None or user["role"] != "admin":
+        if user is None:
             flash("Нужен доступ администратора.", "error")
             return redirect(url_for("login"))
+        if user["role"] != "admin":
+            flash("Админ-раздел доступен только администратору.", "error")
+            return redirect(url_for("profile"))
         return view(*args, **kwargs)
     return wrapped_view
 
@@ -214,20 +259,11 @@ def application():
         return redirect(url_for("contacts"))
 
     db = get_db()
+    ensure_application_schema(db)
+    user = current_user()
     db.execute(
-        """
-        CREATE TABLE IF NOT EXISTS applications (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            parent_name TEXT,
-            phone TEXT NOT NULL,
-            comment TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        """
-    )
-    db.execute(
-        "INSERT INTO applications (parent_name, phone, comment) VALUES (?, ?, ?)",
-        (parent_name, phone, comment),
+        "INSERT INTO applications (user_id, parent_name, phone, comment, status) VALUES (?, ?, ?, ?, ?)",
+        (user["id"] if user else None, parent_name, phone, comment, "new"),
     )
     db.commit()
     message = "Заявка отправлена. Администратор свяжется с вами в ближайшее время."
@@ -312,17 +348,117 @@ def logout():
 @app.route("/profile")
 @login_required
 def profile():
-    return render_template("profile.html", active="profile")
+    db = get_db()
+    ensure_application_schema(db)
+    user = current_user()
+    applications = db.execute(
+        "SELECT * FROM applications WHERE user_id = ? ORDER BY created_at DESC, id DESC",
+        (user["id"],),
+    ).fetchall()
+    recommended_programs = [
+        {
+            "title": "Подготовка к школе",
+            "short_description": "Чтение, математика, логика, письмо и уверенность перед первым классом.",
+            "age_from": 5,
+            "age_to": 7,
+        },
+        {
+            "title": "Логопед",
+            "short_description": "Индивидуальная работа со звуками, словарём, связной речью и фонематическим слухом.",
+            "age_from": 4,
+            "age_to": 10,
+        },
+        {
+            "title": "Развитие речи",
+            "short_description": "Занятия для расширения словаря, грамотной речи и уверенного общения.",
+            "age_from": 4,
+            "age_to": 8,
+        },
+        {
+            "title": "Каллиграфия",
+            "short_description": "Аккуратный почерк, правильная посадка и спокойная подготовка руки к письму.",
+            "age_from": 6,
+            "age_to": 10,
+        },
+    ]
+    return render_template(
+        "profile.html",
+        active="profile",
+        applications=applications,
+        recommended_programs=recommended_programs,
+    )
 
 
 @app.route("/admin")
 @admin_required
 def admin():
     db = get_db()
+    ensure_application_schema(db)
+    applications_count = db.execute("SELECT COUNT(*) AS c FROM applications").fetchone()["c"]
+    new_applications_count = db.execute("SELECT COUNT(*) AS c FROM applications WHERE status = 'new'").fetchone()["c"]
     programs_count = db.execute("SELECT COUNT(*) AS c FROM programs").fetchone()["c"]
     news_count = db.execute("SELECT COUNT(*) AS c FROM news").fetchone()["c"]
     users_count = db.execute("SELECT COUNT(*) AS c FROM users").fetchone()["c"]
-    return render_template("admin/index.html", active="profile", programs_count=programs_count, news_count=news_count, users_count=users_count)
+    return render_template(
+        "admin/index.html",
+        active="profile",
+        applications_count=applications_count,
+        new_applications_count=new_applications_count,
+        programs_count=programs_count,
+        news_count=news_count,
+        users_count=users_count,
+    )
+
+
+@app.route("/admin/applications")
+@admin_required
+def admin_applications():
+    db = get_db()
+    ensure_application_schema(db)
+    rows = db.execute(
+        """SELECT applications.*, users.email AS user_email
+        FROM applications
+        LEFT JOIN users ON users.id = applications.user_id
+        ORDER BY applications.created_at DESC, applications.id DESC"""
+    ).fetchall()
+    return render_template(
+        "admin/applications_list.html",
+        active="profile",
+        rows=rows,
+        statuses=APPLICATION_STATUSES,
+    )
+
+
+@app.route("/admin/applications/<int:item_id>", methods=["GET", "POST"])
+@admin_required
+def admin_application_detail(item_id: int):
+    db = get_db()
+    ensure_application_schema(db)
+    if request.method == "POST":
+        status = request.form.get("status", "new")
+        if status not in APPLICATION_STATUSES:
+            flash("Выберите корректный статус заявки.", "error")
+        else:
+            db.execute("UPDATE applications SET status = ? WHERE id = ?", (status, item_id))
+            db.commit()
+            flash("Статус заявки обновлён.", "success")
+            return redirect(url_for("admin_application_detail", item_id=item_id))
+    item = db.execute(
+        """SELECT applications.*, users.name AS user_name, users.email AS user_email
+        FROM applications
+        LEFT JOIN users ON users.id = applications.user_id
+        WHERE applications.id = ?""",
+        (item_id,),
+    ).fetchone()
+    if item is None:
+        flash("Заявка не найдена.", "error")
+        return redirect(url_for("admin_applications"))
+    return render_template(
+        "admin/application_detail.html",
+        active="profile",
+        item=item,
+        statuses=APPLICATION_STATUSES,
+    )
 
 
 @app.route("/admin/news")

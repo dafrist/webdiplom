@@ -1,3 +1,58 @@
 {% extends 'base.html' %}
 {% block title %}Админ-панель — Умники и Умницы{% endblock %}
-{% block content %}<section class="section section-alt"><div class="container"><h1 class="page-title">Админ-панель</h1><p class="section-lead">Управление контентом Flask-версии сайта.</p><div class="cards-row"><article class="card"><h3>Новости</h3><p>{{ news_count }} записей</p><a class="btn btn-full" href="{{ url_for('admin_news') }}">Управлять</a></article><article class="card"><h3>Программы</h3><p>{{ programs_count }} записей</p><a class="btn btn-full" href="{{ url_for('admin_programs') }}">Управлять</a></article><article class="card"><h3>Пользователи</h3><p>{{ users_count }} аккаунтов</p></article></div></div></section>{% endblock %}
+{% block content %}
+<section class="section section-alt admin-section">
+    <div class="container">
+        <div class="admin-header card">
+            <div>
+                <p class="eyebrow">Администрирование</p>
+                <h1 class="page-title">Панель управления</h1>
+                <p class="section-lead">Единый раздел для заявок, новостей, программ и пользователей сайта.</p>
+            </div>
+            <a class="btn btn-outline" href="{{ url_for('profile') }}">Вернуться в кабинет</a>
+        </div>
+
+        <div class="admin-stats-grid">
+            <article class="admin-stat-card card">
+                <span class="stat-label">Заявки</span>
+                <strong>{{ applications_count }}</strong>
+                <p>Новых: {{ new_applications_count }}</p>
+                <a href="{{ url_for('admin_applications') }}">Открыть список</a>
+            </article>
+            <article class="admin-stat-card card">
+                <span class="stat-label">Новости</span>
+                <strong>{{ news_count }}</strong>
+                <p>Записи для раздела новостей</p>
+                <a href="{{ url_for('admin_news') }}">Управлять</a>
+            </article>
+            <article class="admin-stat-card card">
+                <span class="stat-label">Программы</span>
+                <strong>{{ programs_count }}</strong>
+                <p>Учебные направления центра</p>
+                <a href="{{ url_for('admin_programs') }}">Управлять</a>
+            </article>
+            <article class="admin-stat-card card">
+                <span class="stat-label">Пользователи</span>
+                <strong>{{ users_count }}</strong>
+                <p>Аккаунты родителей и администраторов</p>
+            </article>
+        </div>
+
+        <div class="admin-grid">
+            <article class="card admin-card">
+                <h2>Работа с заявками</h2>
+                <p>Просматривайте контакты родителей, комментарии и переводите заявку по статусам.</p>
+                <a class="btn btn-full" href="{{ url_for('admin_applications') }}">Перейти к заявкам</a>
+            </article>
+            <article class="card admin-card">
+                <h2>Контент сайта</h2>
+                <p>Поддерживайте актуальные новости и список программ без изменения кода.</p>
+                <div class="admin-card-actions">
+                    <a class="btn btn-outline" href="{{ url_for('admin_news') }}">Новости</a>
+                    <a class="btn btn-outline" href="{{ url_for('admin_programs') }}">Программы</a>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+{% endblock %}

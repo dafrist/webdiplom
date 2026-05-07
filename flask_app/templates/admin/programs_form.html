@@ -1,3 +1,25 @@
 {% extends 'base.html' %}
 {% block title %}Программа — Админ{% endblock %}
-{% block content %}<section class="section section-alt"><div class="container"><h1 class="page-title">{{ 'Редактировать' if item else 'Добавить' }} программу</h1><div class="form-card"><form method="post"><div class="field"><label>Название</label><input name="title" value="{{ item.title if item else '' }}" required></div><div class="field"><label>Slug</label><input name="slug" value="{{ item.slug if item else '' }}" required></div><div class="field"><label>Возраст от</label><input name="age_from" type="number" value="{{ item.age_from if item else '' }}"></div><div class="field"><label>Возраст до</label><input name="age_to" type="number" value="{{ item.age_to if item else '' }}"></div><div class="field"><label>Краткое описание</label><textarea name="short_description">{{ item.short_description if item else '' }}</textarea></div><div class="field"><label>Полное описание</label><textarea name="full_description">{{ item.full_description if item else '' }}</textarea></div><div class="field"><label>Сортировка</label><input name="sort_order" type="number" value="{{ item.sort_order if item else 0 }}"></div><label><input type="checkbox" name="is_active" {% if not item or item.is_active %}checked{% endif %}> Активна</label><br><button class="btn btn-full" type="submit">Сохранить</button><a class="btn btn-outline" href="{{ url_for('admin_programs') }}">Отмена</a></form></div></div></section>{% endblock %}
+{% block content %}
+<section class="section section-alt admin-section">
+    <div class="container">
+        <div class="breadcrumbs"><a href="{{ url_for('admin') }}">Админ-панель</a> · <a href="{{ url_for('admin_programs') }}">Программы</a></div>
+        <h1 class="page-title">{{ 'Редактировать' if item else 'Добавить' }} программу</h1>
+        <div class="form-card admin-form-card">
+            <form method="post">
+                <div class="form-grid-2">
+                    <div class="field"><label for="title">Название</label><input id="title" name="title" value="{{ item.title if item else '' }}" required></div>
+                    <div class="field"><label for="slug">Slug</label><input id="slug" name="slug" value="{{ item.slug if item else '' }}" required></div>
+                    <div class="field"><label for="age_from">Возраст от</label><input id="age_from" name="age_from" type="number" value="{{ item.age_from if item else '' }}"></div>
+                    <div class="field"><label for="age_to">Возраст до</label><input id="age_to" name="age_to" type="number" value="{{ item.age_to if item else '' }}"></div>
+                </div>
+                <div class="field"><label for="short_description">Краткое описание</label><textarea id="short_description" name="short_description">{{ item.short_description if item else '' }}</textarea></div>
+                <div class="field"><label for="full_description">Полное описание</label><textarea id="full_description" name="full_description">{{ item.full_description if item else '' }}</textarea></div>
+                <div class="field"><label for="sort_order">Сортировка</label><input id="sort_order" name="sort_order" type="number" value="{{ item.sort_order if item else 0 }}"></div>
+                <label class="check-row"><input type="checkbox" name="is_active" {% if not item or item.is_active %}checked{% endif %}> Активна</label>
+                <div class="form-actions"><button class="btn btn-full" type="submit">Сохранить</button><a class="btn btn-outline" href="{{ url_for('admin_programs') }}">Отмена</a></div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}
