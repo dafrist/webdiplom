@@ -27,13 +27,17 @@
             <a href="{{ url_for('gallery') }}" class="{{ 'is-current' if active == 'gallery' else '' }}">Фотогалерея</a>
             <a href="{{ url_for('contacts') }}" class="{{ 'is-current' if active == 'contacts' else '' }}">Контакты</a>
             <a href="{{ url_for('news') }}" class="{{ 'is-current' if active == 'news' else '' }}">Новости</a>
-            {% if current_user %}
-                <a href="{{ url_for('profile') }}" class="{{ 'is-current' if active == 'profile' else '' }}">Личный кабинет</a>
-            {% else %}
-                <a href="{{ url_for('login') }}" class="{{ 'is-current' if active == 'profile' else '' }}" data-login-trigger>Личный кабинет</a>
-            {% endif %}
         </nav>
-        <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-application" data-application-trigger>Онлайн-заявка</a>
+        <div class="header-auth">
+            {% if current_user %}
+                <a href="{{ url_for('profile') }}" class="header-profile-link {{ 'is-current' if active == 'profile' else '' }}">
+                    <span>Вы вошли</span>
+                    <strong>{{ current_user.name or 'Профиль' }}</strong>
+                </a>
+            {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-sm btn-application" data-login-trigger>Войти</a>
+            {% endif %}
+        </div>
     </div>
 </header>
 <main>

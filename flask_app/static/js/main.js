@@ -186,6 +186,16 @@ function setupApplicationForm() {
     });
 }
 
+function setupProfilePanels() {
+    document.addEventListener('click', (event) => {
+        const trigger = event.target.closest('[data-panel-toggle]');
+        if (!trigger) return;
+        const panel = document.getElementById(trigger.dataset.panelToggle);
+        if (!panel) return;
+        panel.hidden = !panel.hidden;
+    });
+}
+
 function setupRegisterForm() {
     const form = document.querySelector('[data-register-form]');
     if (!form) return;
@@ -280,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupRegisterTrigger();
     setupPhoneMask();
     setupApplicationForm();
+    setupProfilePanels();
     setupLoginForm();
     setupRegisterForm();
 

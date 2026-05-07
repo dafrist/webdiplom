@@ -91,6 +91,40 @@ def init_db() -> None:
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
+        CREATE TABLE IF NOT EXISTS children (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            age INTEGER,
+            direction TEXT,
+            notes TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );
+        CREATE TABLE IF NOT EXISTS schedule_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            child_id INTEGER,
+            title TEXT NOT NULL,
+            weekday TEXT NOT NULL,
+            time TEXT NOT NULL,
+            note TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (child_id) REFERENCES children(id)
+        );
+        CREATE TABLE IF NOT EXISTS child_progress (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            child_id INTEGER,
+            attention INTEGER NOT NULL DEFAULT 0,
+            speech INTEGER NOT NULL DEFAULT 0,
+            memory INTEGER NOT NULL DEFAULT 0,
+            communication INTEGER NOT NULL DEFAULT 0,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (child_id) REFERENCES children(id)
+        );
         """
     )
     db.execute(
@@ -110,6 +144,7 @@ def init_db() -> None:
             item,
         )
     ensure_application_schema(db)
+    ensure_parent_profile_schema(db)
     db.commit()
     db.close()
 
@@ -142,6 +177,59 @@ def ensure_application_schema(db: sqlite3.Connection) -> None:
         db.execute("ALTER TABLE applications ADD COLUMN status TEXT NOT NULL DEFAULT 'new'")
     if "created_at" not in columns:
         db.execute("ALTER TABLE applications ADD COLUMN created_at TIMESTAMP")
+
+
+def ensure_parent_profile_schema(db: sqlite3.Connection) -> None:
+    db.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS children (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            name TEXT NOT NULL,
+            age INTEGER,
+            direction TEXT,
+            notes TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );
+        CREATE TABLE IF NOT EXISTS schedule_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            child_id INTEGER,
+            title TEXT NOT NULL,
+            weekday TEXT NOT NULL,
+            time TEXT NOT NULL,
+            note TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (child_id) REFERENCES children(id)
+        );
+        CREATE TABLE IF NOT EXISTS child_progress (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            child_id INTEGER,
+            attention INTEGER NOT NULL DEFAULT 0,
+            speech INTEGER NOT NULL DEFAULT 0,
+            memory INTEGER NOT NULL DEFAULT 0,
+            communication INTEGER NOT NULL DEFAULT 0,
+            updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (child_id) REFERENCES children(id)
+        );
+        """
+    )
+
+
+def parse_int(value: str | None, default: int = 0, minimum: int | None = None, maximum: int | None = None) -> int:
+    try:
+        number = int(value or default)
+    except (TypeError, ValueError):
+        number = default
+    if minimum is not None:
+        number = max(minimum, number)
+    if maximum is not None:
+        number = min(maximum, number)
+    return number
 
 
 APPLICATION_STATUSES = {
@@ -359,7 +447,6 @@ def login():
 @app.route("/logout")
 def logout():
     session.clear()
-    flash("Вы вышли из аккаунта.", "success")
     return redirect(url_for("index"))
 
 
@@ -368,11 +455,34 @@ def logout():
 def profile():
     db = get_db()
     ensure_application_schema(db)
+    ensure_parent_profile_schema(db)
     user = current_user()
     applications = db.execute(
         "SELECT * FROM applications WHERE user_id = ? ORDER BY created_at DESC, id DESC",
         (user["id"],),
     ).fetchall()
+    children = db.execute(
+        "SELECT * FROM children WHERE user_id = ? ORDER BY created_at DESC, id DESC",
+        (user["id"],),
+    ).fetchall()
+    schedule_items = db.execute(
+        """SELECT schedule_items.*, children.name AS child_name
+        FROM schedule_items
+        LEFT JOIN children ON children.id = schedule_items.child_id AND children.user_id = schedule_items.user_id
+        WHERE schedule_items.user_id = ?
+        ORDER BY schedule_items.created_at DESC, schedule_items.id DESC""",
+        (user["id"],),
+    ).fetchall()
+    progress = db.execute(
+        "SELECT * FROM child_progress WHERE user_id = ? ORDER BY updated_at DESC, id DESC LIMIT 1",
+        (user["id"],),
+    ).fetchone()
+    progress_items = [
+        {"key": "attention", "name": "Внимание", "value": progress["attention"] if progress else 0},
+        {"key": "speech", "name": "Речь", "value": progress["speech"] if progress else 0},
+        {"key": "memory", "name": "Память", "value": progress["memory"] if progress else 0},
+        {"key": "communication", "name": "Коммуникация", "value": progress["communication"] if progress else 0},
+    ]
     recommended_programs = [
         {
             "title": "Подготовка к школе",
@@ -391,22 +501,147 @@ def profile():
             "short_description": "Аккуратный почерк, правильная посадка и спокойная подготовка руки к письму.",
         },
     ]
-    progress_items = [
-        {"name": "Внимание", "value": 65},
-        {"name": "Речь", "value": 55},
-        {"name": "Память", "value": 60},
-        {"name": "Коммуникация", "value": 70},
-    ]
     user_columns = {row[1] for row in db.execute("PRAGMA table_info(users)").fetchall()}
     parent_phone = user["phone"] if "phone" in user_columns and user["phone"] else None
     return render_template(
         "profile.html",
         active="profile",
         applications=applications,
-        recommended_programs=recommended_programs,
+        children=children,
+        schedule_items=schedule_items,
         progress_items=progress_items,
+        progress=progress,
+        recommended_programs=recommended_programs,
         parent_phone=parent_phone,
     )
+
+
+@app.post("/profile/children")
+@login_required
+def add_child():
+    user = current_user()
+    name = request.form.get("name", "").strip()
+    if not name:
+        flash("Укажите имя ребенка.", "error")
+        return redirect(url_for("profile"))
+    db = get_db()
+    ensure_parent_profile_schema(db)
+    db.execute(
+        "INSERT INTO children (user_id, name, age, direction, notes) VALUES (?, ?, ?, ?, ?)",
+        (user["id"], name, parse_int(request.form.get("age"), 0, 0, 18), request.form.get("direction", "").strip(), request.form.get("notes", "").strip()),
+    )
+    db.commit()
+    flash("Данные ребенка добавлены.", "success")
+    return redirect(url_for("profile"))
+
+
+@app.post("/profile/children/<int:child_id>")
+@login_required
+def update_child(child_id: int):
+    user = current_user()
+    name = request.form.get("name", "").strip()
+    if not name:
+        flash("Укажите имя ребенка.", "error")
+        return redirect(url_for("profile"))
+    db = get_db()
+    ensure_parent_profile_schema(db)
+    db.execute(
+        """UPDATE children SET name = ?, age = ?, direction = ?, notes = ?
+        WHERE id = ? AND user_id = ?""",
+        (name, parse_int(request.form.get("age"), 0, 0, 18), request.form.get("direction", "").strip(), request.form.get("notes", "").strip(), child_id, user["id"]),
+    )
+    db.commit()
+    flash("Данные ребенка обновлены.", "success")
+    return redirect(url_for("profile"))
+
+
+@app.post("/profile/children/<int:child_id>/delete")
+@login_required
+def delete_child(child_id: int):
+    user = current_user()
+    db = get_db()
+    ensure_parent_profile_schema(db)
+    db.execute("UPDATE schedule_items SET child_id = NULL WHERE user_id = ? AND child_id = ?", (user["id"], child_id))
+    db.execute("UPDATE child_progress SET child_id = NULL WHERE user_id = ? AND child_id = ?", (user["id"], child_id))
+    db.execute("DELETE FROM children WHERE id = ? AND user_id = ?", (child_id, user["id"]))
+    db.commit()
+    flash("Ребенок удален из профиля.", "success")
+    return redirect(url_for("profile"))
+
+
+@app.post("/profile/schedule")
+@login_required
+def add_schedule_item():
+    user = current_user()
+    title = request.form.get("title", "").strip()
+    weekday = request.form.get("weekday", "").strip()
+    time = request.form.get("time", "").strip()
+    if not title or not weekday or not time:
+        flash("Заполните название, день и время занятия.", "error")
+        return redirect(url_for("profile"))
+    child_id = parse_int(request.form.get("child_id"), 0, 0) or None
+    db = get_db()
+    ensure_parent_profile_schema(db)
+    if child_id:
+        exists = db.execute("SELECT id FROM children WHERE id = ? AND user_id = ?", (child_id, user["id"])).fetchone()
+        child_id = child_id if exists else None
+    db.execute(
+        "INSERT INTO schedule_items (user_id, child_id, title, weekday, time, note) VALUES (?, ?, ?, ?, ?, ?)",
+        (user["id"], child_id, title, weekday, time, request.form.get("note", "").strip()),
+    )
+    db.commit()
+    flash("Занятие добавлено в расписание.", "success")
+    return redirect(url_for("profile"))
+
+
+@app.post("/profile/schedule/<int:item_id>/delete")
+@login_required
+def delete_schedule_item(item_id: int):
+    user = current_user()
+    db = get_db()
+    ensure_parent_profile_schema(db)
+    db.execute("DELETE FROM schedule_items WHERE id = ? AND user_id = ?", (item_id, user["id"]))
+    db.commit()
+    flash("Занятие удалено из расписания.", "success")
+    return redirect(url_for("profile"))
+
+
+@app.post("/profile/progress")
+@login_required
+def update_progress():
+    user = current_user()
+    db = get_db()
+    ensure_parent_profile_schema(db)
+    child_id = parse_int(request.form.get("child_id"), 0, 0) or None
+    if child_id:
+        exists = db.execute("SELECT id FROM children WHERE id = ? AND user_id = ?", (child_id, user["id"])).fetchone()
+        child_id = child_id if exists else None
+    values = (
+        child_id,
+        parse_int(request.form.get("attention"), 0, 0, 100),
+        parse_int(request.form.get("speech"), 0, 0, 100),
+        parse_int(request.form.get("memory"), 0, 0, 100),
+        parse_int(request.form.get("communication"), 0, 0, 100),
+        user["id"],
+    )
+    existing = db.execute("SELECT id FROM child_progress WHERE user_id = ? ORDER BY updated_at DESC, id DESC LIMIT 1", (user["id"],)).fetchone()
+    if existing:
+        db.execute(
+            """UPDATE child_progress
+            SET child_id = ?, attention = ?, speech = ?, memory = ?, communication = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ? AND user_id = ?""",
+            (*values[:-1], existing["id"], user["id"]),
+        )
+    else:
+        db.execute(
+            """INSERT INTO child_progress
+            (child_id, attention, speech, memory, communication, user_id)
+            VALUES (?, ?, ?, ?, ?, ?)""",
+            values,
+        )
+    db.commit()
+    flash("Прогресс обновлен.", "success")
+    return redirect(url_for("profile"))
 
 
 @app.route("/admin")
