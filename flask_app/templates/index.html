@@ -51,7 +51,7 @@
 
 <section class="section section-programs-preview">
     <div class="container">
-        <h2 class="page-title">Программы обучения</h2>
+        <h2 class="page-title">Наши программы</h2>
         <p class="section-lead">Основные направления центра для развития, подготовки к школе и мягкой коррекционной поддержки.</p>
         <div class="cards-row program-preview-grid">
             <article class="program-card program-preview-card"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><h3>Подготовка к школе</h3><p>Чтение, счет, мышление и учебные навыки.</p></article>
@@ -93,13 +93,13 @@
         <h2 class="page-title" style="margin:0;">Наша атмосфера</h2>
         <p class="section-lead">Немного настроения центра: игры, творчество и подготовка к школе.</p>
         <div class="photo-strip">
-            <a class="photo-card" href="{{ url_for('gallery') }}"><img src="{{ url_for('static', filename='images/photo_1.png') }}" alt="Мини-группы"></a>
-            <a class="photo-card" href="{{ url_for('gallery') }}"><img src="{{ url_for('static', filename='images/photo_2.png') }}" alt="Творчество"></a>
-            <a class="photo-card" href="{{ url_for('gallery') }}"><img src="{{ url_for('static', filename='images/photo_3.png') }}" alt="Подготовка к школе"></a>
+            <a class="photo-card" href="{{ url_for('gallery') }}"><span class="photo-placeholder"></span><img src="{{ url_for('static', filename='images/photo_1.png') }}" alt="Мини-группы" onerror="this.remove()"></a>
+            <a class="photo-card" href="{{ url_for('gallery') }}"><span class="photo-placeholder"></span><img src="{{ url_for('static', filename='images/photo_2.png') }}" alt="Творчество" onerror="this.remove()"></a>
+            <a class="photo-card" href="{{ url_for('gallery') }}"><span class="photo-placeholder"></span><img src="{{ url_for('static', filename='images/photo_3.png') }}" alt="Подготовка к школе" onerror="this.remove()"></a>
         </div>
     </div>
 </section>
-<section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="cards-row">{% for p in programs %}<article class="program-card"><h3>{{ p.title }}</h3><p>{{ p.short_description }}</p><a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a></article>{% endfor %}</div></div></section>
-<section class="section"><div class="container"><h2 class="page-title">Новости центра</h2><div class="cards-row">{% for n in news %}<article class="news-card"><h3>{{ n.title }}</h3><p>{{ n.teaser }}</p></article>{% endfor %}</div></div></section>
+<section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="programs-grid programs-grid-preview">{% for p in programs %}<article class="program-card program-list-card"><div class="program-card-head"><span class="ui-icon program-card-icon {{ p.slug|program_icon }}" aria-hidden="true"></span><h3>{{ p.title }}</h3></div><p class="program-description">{{ p.short_description }}</p><a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a></article>{% endfor %}</div></div></section>
+<section class="section"><div class="container"><h2 class="page-title">Новости центра</h2><div class="news-grid news-grid-preview">{% for n in news %}<article class="news-card news-list-card"><time class="news-date" datetime="{{ n.created_at }}">{{ n.created_at|format_date }}</time><h3>{{ n.title }}</h3><p class="news-teaser">{{ n.teaser }}</p></article>{% endfor %}</div></div></section>
 <section class="section section-final-cta"><div class="container"><div class="cta-band cta-band-final"><div><h2 class="page-title" style="margin:0 0 8px;">Подберем программу под возраст и цель ребенка</h2><p class="section-lead" style="margin:0;">Оставьте заявку — администратор уточнит детали и предложит удобное время.</p></div><a href="{{ url_for('contacts') }}" class="btn btn-full" data-application-trigger>Оставить заявку</a></div></div></section>
 {% endblock %}

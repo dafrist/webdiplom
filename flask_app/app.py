@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sqlite3
+from datetime import datetime
 from functools import wraps
 from pathlib import Path
 
@@ -158,6 +159,24 @@ def program_icon(slug: str) -> str:
 @app.template_filter("program_icon")
 def program_icon_filter(slug: str) -> str:
     return program_icon(slug)
+
+
+def format_date(value: str | None) -> str:
+    if not value:
+        return "Дата уточняется"
+    text = str(value)
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%Y-%m-%d"):
+        try:
+            parsed = datetime.strptime(text[:19] if fmt.endswith("%S") else text[:10], fmt)
+            return parsed.strftime("%d.%m.%Y")
+        except ValueError:
+            continue
+    return text[:10]
+
+
+@app.template_filter("format_date")
+def format_date_filter(value: str | None) -> str:
+    return format_date(value)
 
 
 @app.route("/")

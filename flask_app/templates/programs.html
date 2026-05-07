@@ -1,21 +1,29 @@
 {% extends 'base.html' %}
 {% block title %}Программы — Умники и Умницы{% endblock %}
 {% block content %}
-<section class="section section-alt">
+<section class="section section-alt page-section">
     <div class="container">
         <div class="breadcrumbs"><a href="{{ url_for('index') }}">Главная</a> · Программы</div>
-        <h1 class="page-title">Программы центра</h1>
-        <p class="section-lead">Каждая программа адаптирована под возраст и потребности детей.</p>
-        <div class="cards-row">
+        <header class="section-heading">
+            <h1 class="page-title">Программы центра</h1>
+            <p class="section-lead">Каждая программа адаптирована под возраст, задачи семьи и текущий уровень ребёнка.</p>
+        </header>
+        <div class="programs-grid">
             {% for p in programs %}
-                <article class="program-card">
-                    <h3><span class="ui-icon program-title-icon {{ p.slug|program_icon }}" aria-hidden="true"></span>{{ p.title }}</h3>
-                    <p class="section-lead">Возраст: {% if p.age_from or p.age_to %}{{ p.age_from or '' }}–{{ p.age_to or '' }} лет{% else %}по согласованию{% endif %}</p>
-                    <p>{{ p.short_description }}</p>
-                    <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-full" data-application-trigger>Связаться</a>
+                <article class="program-card program-list-card" id="program-{{ p.id }}">
+                    <div class="program-card-head">
+                        <span class="ui-icon program-card-icon {{ p.slug|program_icon }}" aria-hidden="true"></span>
+                        <h2>{{ p.title }}</h2>
+                    </div>
+                    <p class="program-age">Возраст: {% if p.age_from or p.age_to %}{{ p.age_from or '' }}–{{ p.age_to or '' }} лет{% else %}по согласованию{% endif %}</p>
+                    <p class="program-description">{{ p.short_description }}</p>
+                    <div class="program-card-actions">
+                        <a href="{{ url_for('programs') }}#program-{{ p.id }}" class="btn btn-sm btn-outline">Подробнее</a>
+                        <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-full" data-application-trigger>Записаться</a>
+                    </div>
                 </article>
             {% else %}
-                <p>Пока нет добавленных программ.</p>
+                <article class="empty-card">Пока нет добавленных программ.</article>
             {% endfor %}
         </div>
     </div>
