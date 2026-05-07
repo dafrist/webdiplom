@@ -4,7 +4,7 @@ import sqlite3
 from functools import wraps
 from pathlib import Path
 
-from flask import Flask, flash, g, redirect, render_template, request, session, url_for
+from flask import Flask, flash, g, jsonify, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -79,6 +79,13 @@ def init_db() -> None:
             teaser TEXT,
             body TEXT,
             is_published INTEGER NOT NULL DEFAULT 1
+        );
+        CREATE TABLE IF NOT EXISTS applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_name TEXT,
+            phone TEXT NOT NULL,
+            comment TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """
     )
@@ -165,6 +172,47 @@ def contacts():
     return render_template("contacts.html", active="contacts")
 
 
+@app.post("/application")
+def application():
+    parent_name = request.form.get("parent_name", "").strip()
+    phone = request.form.get("phone", "").strip()
+    comment = request.form.get("comment", "").strip()
+    digits = "".join(ch for ch in phone if ch.isdigit())
+    if digits.startswith("8"):
+        digits = "7" + digits[1:]
+    elif digits.startswith("9"):
+        digits = "7" + digits
+    if len(digits) != 11 or not digits.startswith("7"):
+        message = "Укажите телефон в формате +7 (999) 999-99-99."
+        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+            return jsonify(ok=False, error=message), 400
+        flash(message, "error")
+        return redirect(url_for("contacts"))
+
+    db = get_db()
+    db.execute(
+        """
+        CREATE TABLE IF NOT EXISTS applications (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            parent_name TEXT,
+            phone TEXT NOT NULL,
+            comment TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        """
+    )
+    db.execute(
+        "INSERT INTO applications (parent_name, phone, comment) VALUES (?, ?, ?)",
+        (parent_name, phone, comment),
+    )
+    db.commit()
+    message = "Заявка отправлена. Администратор свяжется с вами в ближайшее время."
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return jsonify(ok=True, message=message)
+    flash(message, "success")
+    return redirect(url_for("contacts"))
+
+
 @app.route("/gallery")
 def gallery():
     return render_template("gallery.html", active="gallery")
@@ -207,13 +255,26 @@ def login():
     if request.method == "POST":
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
+        is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
+        if not email or not password:
+            message = "Заполните e-mail и пароль."
+            if is_ajax:
+                return jsonify(ok=False, error=message), 400
+            flash(message, "error")
+            return render_template("login.html", active="profile")
         user = get_db().execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
         if user and check_password_hash(user["password_hash"], password):
             session.clear()
             session["user_id"] = user["id"]
+            next_url = url_for("admin" if user["role"] == "admin" else "profile")
+            if is_ajax:
+                return jsonify(ok=True, redirect=next_url)
             flash("Вы вошли в личный кабинет.", "success")
-            return redirect(url_for("admin" if user["role"] == "admin" else "profile"))
-        flash("Неверный email или пароль.", "error")
+            return redirect(next_url)
+        message = "Неверный e-mail или пароль."
+        if is_ajax:
+            return jsonify(ok=False, error=message), 401
+        flash(message, "error")
     return render_template("login.html", active="profile")
 
 

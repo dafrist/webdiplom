@@ -8,7 +8,7 @@
             <h1 class="hero-title">Детский центр, куда дети идут с радостью</h1>
             <p class="hero-subtitle">Развивающие занятия, логопед, психолог, подготовка к школе. Уютная атмосфера и индивидуальный подход.</p>
             <div class="hero-actions">
-                <a href="{{ url_for('contacts') }}" class="btn btn-full">Оставить заявку</a>
+                <a href="{{ url_for('contacts') }}" class="btn btn-full" data-application-trigger>Оставить заявку</a>
                 <a href="{{ url_for('programs') }}" class="btn btn-outline">Посмотреть программы</a>
             </div>
             <div class="hero-shortcuts">
@@ -101,5 +101,5 @@
 </section>
 <section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="cards-row">{% for p in programs %}<article class="program-card"><h3>{{ p.title }}</h3><p>{{ p.short_description }}</p><a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a></article>{% endfor %}</div></div></section>
 <section class="section"><div class="container"><h2 class="page-title">Новости центра</h2><div class="cards-row">{% for n in news %}<article class="news-card"><h3>{{ n.title }}</h3><p>{{ n.teaser }}</p></article>{% endfor %}</div></div></section>
-<section class="section section-final-cta"><div class="container"><div class="cta-band cta-band-final"><div><h2 class="page-title" style="margin:0 0 8px;">Подберем программу под возраст и цель ребенка</h2><p class="section-lead" style="margin:0;">Оставьте заявку — администратор уточнит детали и предложит удобное время.</p></div><a href="{{ url_for('contacts') }}" class="btn btn-full">Оставить заявку</a></div></div></section>
+<section class="section section-final-cta"><div class="container"><div class="cta-band cta-band-final"><div><h2 class="page-title" style="margin:0 0 8px;">Подберем программу под возраст и цель ребенка</h2><p class="section-lead" style="margin:0;">Оставьте заявку — администратор уточнит детали и предложит удобное время.</p></div><a href="{{ url_for('contacts') }}" class="btn btn-full" data-application-trigger>Оставить заявку</a></div></div></section>
 {% endblock %}

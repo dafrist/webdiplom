@@ -737,7 +737,7 @@ textarea:focus,
 select:focus {
     background: #FFFFFF;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(216, 107, 31, 0.14);
+    box-shadow: none;
     outline: none;
 }
 
@@ -878,6 +878,178 @@ input[type="radio"] {
     width: 100%;
     height: 220px;
     object-fit: cover;
+}
+
+
+/* Modals */
+
+body.modal-open {
+    overflow: hidden;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 140;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(31, 31, 31, 0.48);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
+}
+
+.modal-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    position: relative;
+    width: min(460px, 100%);
+    max-height: min(100vh - 40px, 720px);
+    overflow-y: auto;
+    padding: 28px;
+    border: 1px solid rgba(231, 222, 211, 0.9);
+    border-radius: 24px;
+    background: #FFFFFF;
+    box-shadow: 0 24px 70px rgba(31, 31, 31, 0.18);
+    transform: translateY(8px) scale(0.98);
+    transition: transform 0.18s ease;
+}
+
+.modal-overlay.is-open .modal-card {
+    transform: translateY(0) scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--bg-soft);
+    color: var(--text);
+    box-shadow: none;
+    font-size: 24px;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    background: var(--accent-soft);
+    border-color: rgba(216, 107, 31, 0.45);
+    color: var(--accent-hover);
+    transform: none;
+}
+
+.modal-close:focus,
+.modal-close:focus-visible {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: none;
+}
+
+.modal-title {
+    margin: 0 44px 10px 0;
+    font-size: 28px;
+    line-height: 1.18;
+    font-weight: 760;
+    letter-spacing: -0.03em;
+}
+
+.modal-text {
+    margin: 0 0 20px;
+    color: var(--muted);
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-field {
+    margin: 0;
+}
+
+.form-field label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.form-input,
+.form-field .form-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-control);
+    background: #F5F2EE;
+    color: var(--text);
+    padding: 12px 14px;
+    min-height: 46px;
+    font-size: 15px;
+    box-shadow: none;
+    outline: none;
+    transition: background 0.16s ease, border-color 0.16s ease;
+}
+
+.form-input:hover,
+.form-field .form-input:hover {
+    background: #F6F3EF;
+    border-color: #DED4CA;
+}
+
+.form-input:focus,
+.form-input:focus-visible,
+.form-field .form-input:focus,
+.form-field .form-input:focus-visible {
+    background: #FFFFFF;
+    border-color: var(--accent);
+    box-shadow: none;
+    outline: none;
+}
+
+.form-error,
+.form-success {
+    border-radius: var(--radius-control);
+    padding: 13px 14px;
+    font-size: 14px;
+    line-height: 1.45;
+    border: 1px solid currentColor;
+    background: #FFFFFF;
+}
+
+.form-error {
+    color: var(--danger);
+}
+
+.form-success {
+    color: var(--success);
+}
+
+.form-error[hidden],
+.form-success[hidden],
+[data-application-form-view][hidden] {
+    display: none;
+}
+
+.modal-success {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.modal-form .btn + .btn {
+    margin-top: -4px;
 }
 
 /* Discount popup */
@@ -1057,6 +1229,7 @@ input[type="radio"] {
     .program-card,
     .big-form,
     .cta-band,
+    .modal-card,
     .discount-popup__card {
         width: 100%;
         padding: 20px;
