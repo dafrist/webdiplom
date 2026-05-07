@@ -11,7 +11,10 @@
 <header class="site-header">
     <div class="container header-inner">
         <a class="logo" href="{{ url_for('index') }}" style="text-decoration:none;">
-            <div class="logo-circle">у</div>
+            <span class="logo-mark">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Умники и Умницы" onerror="this.hidden=true; this.parentElement.classList.add('is-fallback')">
+                <span class="logo-fallback">У</span>
+            </span>
             <div class="logo-text">
                 <div class="logo-title">Умники и Умницы</div>
                 <div class="logo-subtitle">центр развития личности</div>
@@ -26,7 +29,7 @@
             <a href="{{ url_for('news') }}" class="{{ 'is-current' if active == 'news' else '' }}">Новости</a>
             <a href="{{ url_for('profile' if current_user else 'login') }}" class="{{ 'is-current' if active == 'profile' else '' }}">Личный кабинет</a>
         </nav>
-        <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-outline">Онлайн-заявка</a>
+        <a href="{{ url_for('contacts') }}" class="btn btn-sm btn-application">Онлайн-заявка</a>
     </div>
 </header>
 <main>

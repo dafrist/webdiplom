@@ -12,7 +12,10 @@
 <header class="site-header">
     <div class="container header-inner">
         <div class="logo">
-            <div class="logo-circle">у</div>
+            <span class="logo-mark">
+                <img src="/static/images/logo.png" alt="Умники и Умницы" onerror="this.hidden=true; this.parentElement.classList.add('is-fallback')">
+                <span class="logo-fallback">У</span>
+            </span>
             <div class="logo-text">
                 <div class="logo-title">Умники и Умницы</div>
                 <div class="logo-subtitle">центр развития личности</div>
@@ -28,127 +31,117 @@
             <a href="news.php">Новости</a>
             <a href="login.php">Личный кабинет</a>
         </nav>
-        <a href="parents.php" class="btn btn-sm btn-outline">Онлайн-заявка</a>
+        <a href="parents.php" class="btn btn-sm btn-application">Онлайн-заявка</a>
     </div>
 </header>
 
 <main>
-    <section class="section section-hero">
-        <div class="container hero-inner hero-inner-lite">
-            <div>
-                <div class="hero-eyebrow">👶 3–10 лет · г. Уфа</div>
-                <h1 class="hero-title">Детский центр, куда дети идут с радостью</h1>
-                <p class="hero-subtitle">
-                    Развивающие занятия, логопед, психолог, подготовка к школе.
-                    Уютная атмосфера и индивидуальный подход.
-                </p>
-
-                <div class="hero-actions">
-                    <a href="parents.php" class="btn btn-full">Оставить заявку</a>
-                    <a href="programs.php" class="btn btn-outline">Посмотреть программы</a>
-                </div>
-
-                <div class="hero-shortcuts">
-                    <a class="shortcut" href="programs.php">
-                        <span class="shortcut-emoji">🧩</span>
-                        <span>Мини‑группы</span>
-                    </a>
-                    <a class="shortcut" href="programs.php">
-                        <span class="shortcut-emoji">🗣️</span>
-                        <span>Развитие речи</span>
-                    </a>
-                    <a class="shortcut" href="programs.php">
-                        <span class="shortcut-emoji">📚</span>
-                        <span>К школе</span>
-                    </a>
-                    <a class="shortcut" href="programs.php">
-                        <span class="shortcut-emoji">💛</span>
-                        <span>Психолог</span>
-                    </a>
-                </div>
+<section class="section section-hero">
+    <div class="container hero-inner hero-inner-lite">
+        <div>
+            <div class="hero-eyebrow"><span class="ui-icon ui-icon-location" aria-hidden="true"></span>3–10 лет · г. Уфа</div>
+            <h1 class="hero-title">Детский центр, куда дети идут с радостью</h1>
+            <p class="hero-subtitle">Развивающие занятия, логопед, психолог, подготовка к школе. Уютная атмосфера и индивидуальный подход.</p>
+            <div class="hero-actions">
+                <a href="parents.php" class="btn btn-full">Оставить заявку</a>
+                <a href="programs.php" class="btn btn-outline">Посмотреть программы</a>
             </div>
-
-            <div class="hero-visual hero-visual-lite">
-                <div class="hero-card hero-card-lite">
-                    <div class="hero-stickers">
-                        <span class="sticker s1">🧸</span>
-                        <span class="sticker s2">🎨</span>
-                        <span class="sticker s3">✏️</span>
-                        <span class="sticker s4">⭐</span>
-                    </div>
-
-                    <div class="hero-badges">
-                        <div class="hero-badge">👩‍🏫 Малые группы<br><strong>до 8 детей</strong></div>
-                        <div class="hero-badge">🕒 Удобный график<br><strong>подберём время</strong></div>
-                    </div>
-
-                    <div class="hero-mini">
-                        <div class="mini-pill">📍 Уфа</div>
-                        <div class="mini-pill">🎒 Подготовка к школе</div>
-                        <div class="mini-pill">🗣️ Логопед</div>
-                    </div>
-                </div>
+            <div class="hero-shortcuts">
+                <a class="shortcut" href="programs.php"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><span>Мини‑группы</span></a>
+                <a class="shortcut" href="programs.php"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><span>Развитие речи</span></a>
+                <a class="shortcut" href="programs.php"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><span>К школе</span></a>
+                <a class="shortcut" href="programs.php"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><span>Психолог</span></a>
             </div>
         </div>
-    </section>
-
-    <section class="section section-photos">
-        <div class="container">
-            <div class="photos-head">
-                <h2 class="page-title" style="margin:0;">Наша атмосфера ✨</h2>
-                <p class="section-lead" style="margin:6px 0 0;">
-                    Немного настроения центра: игры, творчество и подготовка к школе.
-                </p>
-            </div>
-
-            <div class="photo-strip">
-                <a class="photo-card" href="gallery.html" title="Открыть фотогалерею">
-                    <img src="assets/images/photo_1.png" alt="Мини-группы">
-                </a>
-                <a class="photo-card" href="gallery.html" title="Открыть фотогалерею">
-                    <img src="assets/images/photo_2.png" alt="Творчество">
-                </a>
-                <a class="photo-card" href="gallery.html" title="Открыть фотогалерею">
-                    <img src="assets/images/photo_3.png" alt="Подготовка к школе">
-                </a>
-            </div>
-
-            <div class="photos-cta">
-                <a href="gallery.html" class="btn btn-outline">Смотреть фотогалерею</a>
-                <a href="parents.php" class="btn btn-full">Записаться</a>
-            </div>
-        </div>
-    </section>
-
-
-
-    <section class="section section-lite">
-        <div class="container">
-            <div class="lite-grid">
-                <article class="card lite-card">
-                    <h3>🌸 Мягкая адаптация</h3>
-                    <p class="section-lead">Помогаем ребёнку спокойно включиться в занятия через игру и поддержку педагога.</p>
-                </article>
-                <article class="card lite-card">
-                    <h3>🚀 Видимый результат</h3>
-                    <p class="section-lead">Развиваем речь, внимание и мышление — без перегруза и с интересом.</p>
-                </article>
-            </div>
-
-            <div class="cta-band">
+        <div class="hero-visual hero-visual-lite">
+            <div class="hero-card hero-card-lite hero-feature-card">
                 <div>
-                    <h2 class="page-title" style="margin:0 0 6px;">Хотите подобрать программу?</h2>
-                    <p class="section-lead" style="margin:0;">Оставьте заявку — мы уточним возраст, интересы и подберём удобное расписание.</p>
+                    <span class="hero-card-label">Главное о центре</span>
+                    <h2>Поддерживаем развитие ребенка без перегруза</h2>
+                    <p>Подбираем формат занятий под возраст, задачу семьи и комфортный темп ребенка.</p>
                 </div>
-                <a href="parents.php" class="btn btn-full">Связаться</a>
+                <div class="hero-feature-grid">
+                    <div class="hero-feature"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><strong>Мини-группы до 8 детей</strong></div>
+                    <div class="hero-feature"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><strong>Подбор программы</strong></div>
+                    <div class="hero-feature"><span class="ui-icon ui-icon-clock" aria-hidden="true"></span><strong>Удобное расписание</strong></div>
+                    <div class="hero-feature"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><strong>Подготовка к школе</strong></div>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
+<section class="section section-benefits">
+    <div class="container">
+        <h2 class="page-title">Почему выбирают нас</h2>
+        <p class="section-lead">Спокойная среда, понятная программа и внимательные педагоги помогают детям учиться с интересом.</p>
+        <div class="cards-row feature-grid">
+            <article class="card feature-card"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><h3>Индивидуальный подход</h3><p>Учитываем возраст, характер и текущие навыки ребенка.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><h3>Мини-группы</h3><p>Педагог успевает уделить внимание каждому участнику занятия.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-shield" aria-hidden="true"></span><h3>Опытные педагоги</h3><p>Занятия ведут специалисты, которые умеют заинтересовать детей.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-clock" aria-hidden="true"></span><h3>Удобное расписание</h3><p>Подбираем время занятий так, чтобы семье было комфортно.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section section-programs-preview">
+    <div class="container">
+        <h2 class="page-title">Программы обучения</h2>
+        <p class="section-lead">Основные направления центра для развития, подготовки к школе и мягкой коррекционной поддержки.</p>
+        <div class="cards-row program-preview-grid">
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><h3>Подготовка к школе</h3><p>Чтение, счет, мышление и учебные навыки.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><h3>Развитие речи</h3><p>Расширяем словарный запас и связную речь.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><h3>Каллиграфия</h3><p>Аккуратное письмо, посадка и уверенная рука.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-phone" aria-hidden="true"></span><h3>Логопед</h3><p>Индивидуальная работа со звукопроизношением.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><h3>Психолог</h3><p>Поддержка эмоционального развития и адаптации.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><h3>Творческие занятия</h3><p>Развиваем воображение, внимание и мелкую моторику.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section section-steps">
+    <div class="container">
+        <h2 class="page-title">Как проходит запись</h2>
+        <div class="steps-grid">
+            <article class="step-card"><span class="step-number">1</span><h3>Оставляете заявку</h3><p>Заполняете форму или переходите в раздел контактов.</p></article>
+            <article class="step-card"><span class="step-number">2</span><h3>Администратор связывается</h3><p>Уточняет возраст ребенка, цель занятий и удобное время.</p></article>
+            <article class="step-card"><span class="step-number">3</span><h3>Подбираем программу</h3><p>Предлагаем подходящее направление и формат занятий.</p></article>
+            <article class="step-card"><span class="step-number">4</span><h3>Первое занятие</h3><p>Ребенок приходит в центр и знакомится с педагогом.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section section-results">
+    <div class="container">
+        <h2 class="page-title">Результаты занятий</h2>
+        <div class="cards-row results-grid">
+            <article class="card result-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><p>ребенок увереннее общается;</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><p>улучшается внимание и память;</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><p>появляется интерес к учебе;</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-shield" aria-hidden="true"></span><p>формируется готовность к школе.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section section-photos">
+    <div class="container">
+        <h2 class="page-title" style="margin:0;">Наша атмосфера</h2>
+        <p class="section-lead">Немного настроения центра: игры, творчество и подготовка к школе.</p>
+        <div class="photo-strip">
+            <a class="photo-card" href="gallery.html"><img src="assets/images/photo_1.png" alt="Мини-группы"></a>
+            <a class="photo-card" href="gallery.html"><img src="assets/images/photo_2.png" alt="Творчество"></a>
+            <a class="photo-card" href="gallery.html"><img src="assets/images/photo_3.png" alt="Подготовка к школе"></a>
+        </div>
+    </div>
+</section>
+<section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="cards-row"><article class="program-card"><h3>Подготовка к школе</h3><p>Комплексная подготовка к первому классу: чтение, счет, логика и внимание.</p><a class="btn btn-sm btn-outline" href="programs.php">Подробнее</a></article><article class="program-card"><h3>Логопед</h3><p>Индивидуальная диагностика и коррекция речи с бережной поддержкой ребенка.</p><a class="btn btn-sm btn-outline" href="programs.php">Подробнее</a></article><article class="program-card"><h3>Творческое развитие</h3><p>Занятия для воображения, моторики и уверенного самовыражения.</p><a class="btn btn-sm btn-outline" href="programs.php">Подробнее</a></article></div></div></section>
+<section class="section"><div class="container"><h2 class="page-title">Новости центра</h2><div class="cards-row"><article class="news-card"><h3>Открыт набор в мини-группы</h3><p>Приглашаем детей 3–10 лет на развивающие занятия и подготовку к школе.</p></article><article class="news-card"><h3>Индивидуальные консультации</h3><p>Можно записаться к логопеду и психологу для подбора программы.</p></article></div></div></section>
+<section class="section section-final-cta"><div class="container"><div class="cta-band cta-band-final"><div><h2 class="page-title" style="margin:0 0 8px;">Подберем программу под возраст и цель ребенка</h2><p class="section-lead" style="margin:0;">Оставьте заявку — администратор уточнит детали и предложит удобное время.</p></div><a href="parents.php" class="btn btn-full">Оставить заявку</a></div></div></section>
 
     <div class="discount-popup" data-discount-popup>
         <div class="discount-popup__card">
             <button class="discount-popup__close" type="button" data-discount-popup-close>&times;</button>
-            <h3>🎁 Скидка 10% на первый месяц</h3>
+            <h3>Скидка 10% на первый месяц</h3>
             <p>Оставьте заявку на сайте и получите скидку на первый месяц занятий в выбранной программе.</p>
             <a href="parents.php" class="btn btn-full" style="margin-top:8px;">Оставить заявку</a>
             <p class="section-lead" style="font-size:12px;margin-top:6px;">Предложение действует ограниченное время.</p>
