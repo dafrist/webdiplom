@@ -5,25 +5,30 @@
     <div class="container">
         <div class="profile-hero card">
             <div>
-                <p class="eyebrow">Личный кабинет</p>
+                <p class="eyebrow">Личный кабинет родителя</p>
                 <h1 class="page-title">Здравствуйте, {{ current_user.name }}!</h1>
-                <p class="section-lead">Здесь собраны ваши заявки, полезные материалы и быстрые ссылки для выбора занятий.</p>
+                <p class="section-lead">Здесь можно отслеживать заявки, смотреть рекомендации и быстро записаться на консультацию.</p>
             </div>
             <div class="profile-actions profile-actions-hero">
                 <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
-                <a class="btn btn-outline" href="{{ url_for('programs') }}">Программы</a>
+                <a class="btn btn-outline" href="{{ url_for('programs') }}">Посмотреть программы</a>
             </div>
         </div>
 
-        <div class="profile-grid">
+        <div class="profile-dashboard-grid">
             <article class="card profile-card">
                 <div class="card-heading">
-                    <h2>Профиль пользователя</h2>
+                    <div>
+                        <p class="eyebrow">Родитель</p>
+                        <h2>Карточка родителя</h2>
+                    </div>
                     <span class="badge badge-muted">{{ 'Администратор' if current_user.role == 'admin' else 'Родитель' }}</span>
                 </div>
                 <dl class="profile-details">
                     <div><dt>Имя</dt><dd>{{ current_user.name }}</dd></div>
                     <div><dt>Email</dt><dd>{{ current_user.email }}</dd></div>
+                    <div><dt>Роль</dt><dd>{{ 'Администратор' if current_user.role == 'admin' else 'Родитель' }}</dd></div>
+                    <div><dt>Телефон</dt><dd>{{ parent_phone or 'Телефон пока не указан' }}</dd></div>
                     <div><dt>Дата регистрации</dt><dd>{{ current_user.created_at|format_date }}</dd></div>
                 </dl>
                 {% if current_user.role == 'admin' %}
@@ -31,97 +36,153 @@
                 {% endif %}
             </article>
 
-            <article class="card profile-card">
+            <article class="card profile-card child-card">
                 <div class="card-heading">
-                    <h2>Быстрые действия</h2>
-                    <span class="badge badge-muted">4 действия</span>
+                    <div>
+                        <p class="eyebrow">Ребенок</p>
+                        <h2>Данные ребенка</h2>
+                    </div>
+                    <span class="badge badge-muted">Заполняется после заявки</span>
+                </div>
+                <p class="profile-muted">Оставьте заявку — администратор уточнит возраст ребенка и подберет подходящую программу.</p>
+                <dl class="profile-details profile-details-compact">
+                    <div><dt>Направление</dt><dd>Подбирается</dd></div>
+                    <div><dt>Статус</dt><dd>Ожидает заявки</dd></div>
+                    <div><dt>Рекомендованная программа</dt><dd>Будет назначена после консультации</dd></div>
+                </dl>
+                <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
+            </article>
+
+            <section class="card profile-card profile-card-wide">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">Мои заявки</p>
+                        <h2>История обращений</h2>
+                    </div>
+                    <span class="badge badge-muted">{{ applications|length }}</span>
+                </div>
+                {% if applications %}
+                    <div class="table-wrapper profile-table-wrapper">
+                        <table class="data-table profile-table">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Телефон</th>
+                                    <th>Комментарий</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for application in applications %}
+                                    <tr>
+                                        <td>{{ application.created_at|format_date }}</td>
+                                        <td>{{ application.phone }}</td>
+                                        <td>{{ application.comment or 'Комментарий не указан' }}</td>
+                                        <td><span class="badge badge-{{ application.status }}">{{ application.status|status_label }}</span></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="profile-empty-state">
+                        <h3>Заявок пока нет</h3>
+                        <p>После отправки формы заявка появится здесь, а администратор сможет уточнить детали по телефону.</p>
+                        <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
+                    </div>
+                {% endif %}
+            </section>
+
+            <section class="card profile-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">Расписание</p>
+                        <h2>Расписание занятий</h2>
+                    </div>
+                </div>
+                {% if applications %}
+                    <ul class="profile-list schedule-list">
+                        <li><span>Пн, 17:00</span><strong>Подготовка к школе</strong></li>
+                        <li><span>Ср, 18:00</span><strong>Развитие речи</strong></li>
+                    </ul>
+                {% else %}
+                    <p class="profile-muted">Расписание появится после подтверждения заявки администратором.</p>
+                {% endif %}
+            </section>
+
+            <section class="card profile-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">Прогресс</p>
+                        <h2>Прогресс ребенка</h2>
+                    </div>
+                </div>
+                {% if applications %}
+                    <div class="progress-list">
+                        {% for item in progress_items %}
+                            <div class="progress-item">
+                                <div class="progress-label"><span>{{ item.name }}</span><strong>{{ item.value }}%</strong></div>
+                                <div class="progress-track" aria-label="{{ item.name }} — {{ item.value }}%"><span style="width: {{ item.value }}%;"></span></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="profile-muted">Прогресс появится после начала занятий.</p>
+                {% endif %}
+            </section>
+
+            <section class="card profile-card profile-card-wide">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">Рекомендации</p>
+                        <h2>Рекомендуем посмотреть</h2>
+                    </div>
+                    <a class="btn btn-outline btn-sm" href="{{ url_for('programs') }}">Все программы</a>
+                </div>
+                <div class="program-recommend-grid profile-recommend-grid">
+                    {% for program in recommended_programs %}
+                        <article class="program-card recommendation-card">
+                            <h3>{{ program.title }}</h3>
+                            <p>{{ program.short_description }}</p>
+                            <a class="btn btn-outline" href="{{ url_for('contacts') }}" data-application-trigger>Записаться</a>
+                        </article>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="card profile-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">Уведомления</p>
+                        <h2>Уведомления</h2>
+                    </div>
+                </div>
+                {% if applications %}
+                    <ul class="profile-list notification-list">
+                        <li>Ваша заявка принята.</li>
+                        <li>Администратор свяжется с вами в ближайшее время.</li>
+                        <li>Рекомендуем посмотреть программы подготовки к школе.</li>
+                    </ul>
+                {% else %}
+                    <p class="profile-muted">Оставьте заявку, чтобы администратор подобрал программу.</p>
+                {% endif %}
+            </section>
+
+            <section class="card profile-card quick-card">
+                <div class="card-heading">
+                    <div>
+                        <p class="eyebrow">Действия</p>
+                        <h2>Быстрые действия</h2>
+                    </div>
                 </div>
                 <div class="quick-actions">
                     <a class="btn btn-full" href="{{ url_for('contacts') }}" data-application-trigger>Оставить заявку</a>
-                    <a class="btn btn-outline" href="{{ url_for('programs') }}">Программы</a>
-                    <a class="btn btn-outline" href="{{ url_for('news') }}">Новости</a>
+                    <a class="btn btn-outline" href="{{ url_for('programs') }}">Посмотреть программы</a>
+                    <a class="btn btn-outline" href="{{ url_for('news') }}">Новости центра</a>
                     <a class="btn btn-secondary" href="{{ url_for('logout') }}">Выйти</a>
                 </div>
-            </article>
+            </section>
         </div>
-
-        <section class="profile-block card">
-            <div class="card-heading">
-                <div>
-                    <p class="eyebrow">Мои заявки</p>
-                    <h2>История обращений</h2>
-                </div>
-                <span class="badge badge-muted">{{ applications|length }}</span>
-            </div>
-            <div class="table-wrapper profile-table-wrapper">
-                <table class="data-table profile-table">
-                    <thead>
-                        <tr>
-                            <th>Дата</th>
-                            <th>Телефон</th>
-                            <th>Комментарий</th>
-                            <th>Статус</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for application in applications %}
-                            <tr>
-                                <td>{{ application.created_at|format_date }}</td>
-                                <td>{{ application.phone }}</td>
-                                <td>{{ application.comment or 'Комментарий не указан' }}</td>
-                                <td><span class="badge badge-{{ application.status }}">{{ application.status|status_label }}</span></td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="4" class="empty-cell">Пока нет заявок. Оставьте заявку, и она появится в этом разделе.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section class="profile-block">
-            <div class="section-heading-row">
-                <div>
-                    <p class="eyebrow">Рекомендации</p>
-                    <h2>Рекомендуемые программы</h2>
-                </div>
-                <a class="btn btn-outline btn-sm" href="{{ url_for('programs') }}">Все программы</a>
-            </div>
-            <div class="program-recommend-grid">
-                {% for program in recommended_programs %}
-                    <article class="program-card recommendation-card">
-                        <h3>{{ program.title }}</h3>
-                        <p>{{ program.short_description }}</p>
-                        <div class="program-meta">{{ program.age_from }}–{{ program.age_to }} лет</div>
-                    </article>
-                {% endfor %}
-            </div>
-        </section>
-
-        <section class="profile-block">
-            <div class="section-heading-row">
-                <div>
-                    <p class="eyebrow">Родителям</p>
-                    <h2>Полезная информация</h2>
-                </div>
-            </div>
-            <div class="info-grid">
-                <article class="card info-card">
-                    <h3>Что взять на первое занятие</h3>
-                    <p>Сменную обувь, удобную одежду, воду и небольшой перекус. Тетради и материалы подскажет педагог после знакомства.</p>
-                </article>
-                <article class="card info-card">
-                    <h3>Как проходит подбор программы</h3>
-                    <p>Администратор уточняет возраст и запрос, затем педагог предлагает формат занятий и комфортное расписание.</p>
-                </article>
-                <article class="card info-card">
-                    <h3>Рекомендации родителям</h3>
-                    <p>Сохраняйте регулярность, хвалите за небольшие успехи и обсуждайте с педагогом домашние упражнения.</p>
-                </article>
-            </div>
-        </section>
     </div>
 </section>
 {% endblock %}
