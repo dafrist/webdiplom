@@ -296,17 +296,27 @@ def register():
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "")
+        is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
         if not name or not email or len(password) < 6:
-            flash("Заполните имя, email и пароль от 6 символов.", "error")
+            message = "Заполните имя, email и пароль от 6 символов."
+            if is_ajax:
+                return jsonify(ok=False, error=message), 400
+            flash(message, "error")
         else:
             try:
                 db = get_db()
                 db.execute("INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)", (name, email, generate_password_hash(password)))
                 db.commit()
-                flash("Регистрация успешна. Теперь войдите.", "success")
+                message = "Регистрация завершена. Теперь вы можете войти в личный кабинет."
+                if is_ajax:
+                    return jsonify(ok=True, message=message)
+                flash(message, "success")
                 return redirect(url_for("login"))
             except sqlite3.IntegrityError:
-                flash("Пользователь с таким email уже существует.", "error")
+                message = "Пользователь с таким email уже существует."
+                if is_ajax:
+                    return jsonify(ok=False, error=message), 409
+                flash(message, "error")
     return render_template("register.html", active="profile")
 
 
