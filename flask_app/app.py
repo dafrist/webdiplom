@@ -132,8 +132,16 @@ def ensure_application_schema(db: sqlite3.Connection) -> None:
     columns = {row[1] for row in db.execute("PRAGMA table_info(applications)").fetchall()}
     if "user_id" not in columns:
         db.execute("ALTER TABLE applications ADD COLUMN user_id INTEGER")
+    if "parent_name" not in columns:
+        db.execute("ALTER TABLE applications ADD COLUMN parent_name TEXT")
+    if "phone" not in columns:
+        db.execute("ALTER TABLE applications ADD COLUMN phone TEXT NOT NULL DEFAULT ''")
+    if "comment" not in columns:
+        db.execute("ALTER TABLE applications ADD COLUMN comment TEXT")
     if "status" not in columns:
         db.execute("ALTER TABLE applications ADD COLUMN status TEXT NOT NULL DEFAULT 'new'")
+    if "created_at" not in columns:
+        db.execute("ALTER TABLE applications ADD COLUMN created_at TIMESTAMP")
 
 
 APPLICATION_STATUSES = {
@@ -369,33 +377,35 @@ def profile():
         {
             "title": "Подготовка к школе",
             "short_description": "Чтение, математика, логика, письмо и уверенность перед первым классом.",
-            "age_from": 5,
-            "age_to": 7,
-        },
-        {
-            "title": "Логопед",
-            "short_description": "Индивидуальная работа со звуками, словарём, связной речью и фонематическим слухом.",
-            "age_from": 4,
-            "age_to": 10,
         },
         {
             "title": "Развитие речи",
             "short_description": "Занятия для расширения словаря, грамотной речи и уверенного общения.",
-            "age_from": 4,
-            "age_to": 8,
+        },
+        {
+            "title": "Логопед",
+            "short_description": "Индивидуальная работа со звуками, словарём и связной речью.",
         },
         {
             "title": "Каллиграфия",
             "short_description": "Аккуратный почерк, правильная посадка и спокойная подготовка руки к письму.",
-            "age_from": 6,
-            "age_to": 10,
         },
     ]
+    progress_items = [
+        {"name": "Внимание", "value": 65},
+        {"name": "Речь", "value": 55},
+        {"name": "Память", "value": 60},
+        {"name": "Коммуникация", "value": 70},
+    ]
+    user_columns = {row[1] for row in db.execute("PRAGMA table_info(users)").fetchall()}
+    parent_phone = user["phone"] if "phone" in user_columns and user["phone"] else None
     return render_template(
         "profile.html",
         active="profile",
         applications=applications,
         recommended_programs=recommended_programs,
+        progress_items=progress_items,
+        parent_phone=parent_phone,
     )
 
 

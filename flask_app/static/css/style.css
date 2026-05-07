@@ -2349,3 +2349,177 @@ body.modal-open {
     height: 220px;
     min-height: 220px;
 }
+
+/* Parent profile dashboard */
+.profile-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+.profile-dashboard-grid .card {
+    height: 100%;
+}
+
+.profile-card-wide {
+    grid-column: 1 / -1;
+}
+
+.profile-card .btn {
+    min-height: 44px;
+}
+
+.profile-muted {
+    margin: 0 0 16px;
+    color: var(--muted);
+}
+
+.profile-details-compact {
+    margin-bottom: 18px;
+}
+
+.profile-empty-state {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: #FFFDFB;
+}
+
+.profile-empty-state h3,
+.profile-empty-state p {
+    margin: 0;
+}
+
+.profile-empty-state p {
+    color: var(--muted);
+}
+
+.profile-empty-state .btn {
+    width: fit-content;
+    margin-top: 4px;
+}
+
+.profile-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+}
+
+.profile-list li {
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+}
+
+.schedule-list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+}
+
+.schedule-list span {
+    color: var(--muted);
+    font-weight: 650;
+}
+
+.schedule-list strong {
+    text-align: right;
+    font-weight: 700;
+}
+
+.notification-list li {
+    color: var(--text);
+}
+
+.progress-list {
+    display: grid;
+    gap: 14px;
+}
+
+.progress-item {
+    display: grid;
+    gap: 7px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.progress-label strong {
+    color: var(--muted);
+}
+
+.progress-track {
+    height: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg-soft);
+}
+
+.progress-track span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: #D8CDC0;
+}
+
+.profile-recommend-grid .recommendation-card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.profile-recommend-grid .recommendation-card p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.profile-recommend-grid .recommendation-card .btn {
+    margin-top: auto;
+    width: 100%;
+}
+
+.quick-card .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.quick-card .quick-actions .btn {
+    width: 100%;
+}
+
+@media (max-width: 980px) {
+    .profile-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 720px) {
+    .profile-empty-state .btn {
+        width: 100%;
+    }
+
+    .schedule-list li,
+    .progress-label {
+        align-items: flex-start;
+    }
+
+    .quick-card .quick-actions {
+        grid-template-columns: 1fr;
+    }
+}
