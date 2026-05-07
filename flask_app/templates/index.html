@@ -4,7 +4,7 @@
 <section class="section section-hero">
     <div class="container hero-inner hero-inner-lite">
         <div>
-            <div class="hero-eyebrow">👶 3–10 лет · г. Уфа</div>
+            <div class="hero-eyebrow"><span class="ui-icon ui-icon-location" aria-hidden="true"></span>3–10 лет · г. Уфа</div>
             <h1 class="hero-title">Детский центр, куда дети идут с радостью</h1>
             <p class="hero-subtitle">Развивающие занятия, логопед, психолог, подготовка к школе. Уютная атмосфера и индивидуальный подход.</p>
             <div class="hero-actions">
@@ -12,18 +12,85 @@
                 <a href="{{ url_for('programs') }}" class="btn btn-outline">Посмотреть программы</a>
             </div>
             <div class="hero-shortcuts">
-                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">🧩</span><span>Мини‑группы</span></a>
-                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">🗣️</span><span>Развитие речи</span></a>
-                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">📚</span><span>К школе</span></a>
-                <a class="shortcut" href="{{ url_for('programs') }}"><span class="shortcut-emoji">💛</span><span>Психолог</span></a>
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><span>Мини‑группы</span></a>
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><span>Развитие речи</span></a>
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><span>К школе</span></a>
+                <a class="shortcut" href="{{ url_for('programs') }}"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><span>Психолог</span></a>
             </div>
         </div>
-        <div class="hero-visual hero-visual-lite"><div class="hero-card hero-card-lite"><div class="hero-stickers"><span class="sticker s1">🧸</span><span class="sticker s2">🎨</span><span class="sticker s3">✏️</span><span class="sticker s4">⭐</span></div><div class="hero-badges"><div class="hero-badge">👩‍🏫 Малые группы<br><strong>до 8 детей</strong></div><div class="hero-badge">🕒 Удобный график<br><strong>подберём время</strong></div></div></div></div>
+        <div class="hero-visual hero-visual-lite">
+            <div class="hero-card hero-card-lite hero-feature-card">
+                <div>
+                    <span class="hero-card-label">Главное о центре</span>
+                    <h2>Поддерживаем развитие ребенка без перегруза</h2>
+                    <p>Подбираем формат занятий под возраст, задачу семьи и комфортный темп ребенка.</p>
+                </div>
+                <div class="hero-feature-grid">
+                    <div class="hero-feature"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><strong>Мини-группы до 8 детей</strong></div>
+                    <div class="hero-feature"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><strong>Подбор программы</strong></div>
+                    <div class="hero-feature"><span class="ui-icon ui-icon-clock" aria-hidden="true"></span><strong>Удобное расписание</strong></div>
+                    <div class="hero-feature"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><strong>Подготовка к школе</strong></div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
+
+<section class="section section-benefits">
+    <div class="container">
+        <h2 class="page-title">Почему выбирают нас</h2>
+        <p class="section-lead">Спокойная среда, понятная программа и внимательные педагоги помогают детям учиться с интересом.</p>
+        <div class="cards-row feature-grid">
+            <article class="card feature-card"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><h3>Индивидуальный подход</h3><p>Учитываем возраст, характер и текущие навыки ребенка.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><h3>Мини-группы</h3><p>Педагог успевает уделить внимание каждому участнику занятия.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-shield" aria-hidden="true"></span><h3>Опытные педагоги</h3><p>Занятия ведут специалисты, которые умеют заинтересовать детей.</p></article>
+            <article class="card feature-card"><span class="ui-icon ui-icon-clock" aria-hidden="true"></span><h3>Удобное расписание</h3><p>Подбираем время занятий так, чтобы семье было комфортно.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section section-programs-preview">
+    <div class="container">
+        <h2 class="page-title">Программы обучения</h2>
+        <p class="section-lead">Основные направления центра для развития, подготовки к школе и мягкой коррекционной поддержки.</p>
+        <div class="cards-row program-preview-grid">
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-book" aria-hidden="true"></span><h3>Подготовка к школе</h3><p>Чтение, счет, мышление и учебные навыки.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><h3>Развитие речи</h3><p>Расширяем словарный запас и связную речь.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><h3>Каллиграфия</h3><p>Аккуратное письмо, посадка и уверенная рука.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-phone" aria-hidden="true"></span><h3>Логопед</h3><p>Индивидуальная работа со звукопроизношением.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-heart" aria-hidden="true"></span><h3>Психолог</h3><p>Поддержка эмоционального развития и адаптации.</p></article>
+            <article class="program-card program-preview-card"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><h3>Творческие занятия</h3><p>Развиваем воображение, внимание и мелкую моторику.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section section-steps">
+    <div class="container">
+        <h2 class="page-title">Как проходит запись</h2>
+        <div class="steps-grid">
+            <article class="step-card"><span class="step-number">1</span><h3>Оставляете заявку</h3><p>Заполняете форму или переходите в раздел контактов.</p></article>
+            <article class="step-card"><span class="step-number">2</span><h3>Администратор связывается</h3><p>Уточняет возраст ребенка, цель занятий и удобное время.</p></article>
+            <article class="step-card"><span class="step-number">3</span><h3>Подбираем программу</h3><p>Предлагаем подходящее направление и формат занятий.</p></article>
+            <article class="step-card"><span class="step-number">4</span><h3>Первое занятие</h3><p>Ребенок приходит в центр и знакомится с педагогом.</p></article>
+        </div>
+    </div>
+</section>
+
+<section class="section section-results">
+    <div class="container">
+        <h2 class="page-title">Результаты занятий</h2>
+        <div class="cards-row results-grid">
+            <article class="card result-card"><span class="ui-icon ui-icon-users" aria-hidden="true"></span><p>ребенок увереннее общается;</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-chart" aria-hidden="true"></span><p>улучшается внимание и память;</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-star" aria-hidden="true"></span><p>появляется интерес к учебе;</p></article>
+            <article class="card result-card"><span class="ui-icon ui-icon-shield" aria-hidden="true"></span><p>формируется готовность к школе.</p></article>
+        </div>
+    </div>
+</section>
+
 <section class="section section-photos">
     <div class="container">
-        <h2 class="page-title" style="margin:0;">Наша атмосфера ✨</h2>
+        <h2 class="page-title" style="margin:0;">Наша атмосфера</h2>
         <p class="section-lead">Немного настроения центра: игры, творчество и подготовка к школе.</p>
         <div class="photo-strip">
             <a class="photo-card" href="{{ url_for('gallery') }}"><img src="{{ url_for('static', filename='images/photo_1.png') }}" alt="Мини-группы"></a>
@@ -32,6 +99,7 @@
         </div>
     </div>
 </section>
-<section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="cards-row">{% for p in programs %}<article class="program-card"><h3>{{ p.slug|emoji }} {{ p.title }}</h3><p>{{ p.short_description }}</p><a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a></article>{% endfor %}</div></div></section>
+<section class="section section-lite"><div class="container"><h2 class="page-title">Популярные программы</h2><div class="cards-row">{% for p in programs %}<article class="program-card"><h3>{{ p.title }}</h3><p>{{ p.short_description }}</p><a class="btn btn-sm btn-outline" href="{{ url_for('programs') }}">Подробнее</a></article>{% endfor %}</div></div></section>
 <section class="section"><div class="container"><h2 class="page-title">Новости центра</h2><div class="cards-row">{% for n in news %}<article class="news-card"><h3>{{ n.title }}</h3><p>{{ n.teaser }}</p></article>{% endfor %}</div></div></section>
+<section class="section section-final-cta"><div class="container"><div class="cta-band cta-band-final"><div><h2 class="page-title" style="margin:0 0 8px;">Подберем программу под возраст и цель ребенка</h2><p class="section-lead" style="margin:0;">Оставьте заявку — администратор уточнит детали и предложит удобное время.</p></div><a href="{{ url_for('contacts') }}" class="btn btn-full">Оставить заявку</a></div></div></section>
 {% endblock %}
